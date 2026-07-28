@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concept E — Refined IA | Queen Reen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&family=Inter:ital@1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-lavender: #B99AD6;
+  --color-light-lavender: #E9DDF3;
+  --color-royal-purple: #6D35B5;
+  --color-soft-lilac: #D5BCE8;
+  --color-white: #FFFFFF;
+  --color-soft-gray: #F4F4F6;
+  --color-charcoal: #22222A;
+  --color-cream: #FBF5EF;
+  --color-text-secondary: #5C5661;
+  --color-lavender-deep: #A47FC7;
+  --font-heading: "Sora", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --radius-small: 10px;
+  --radius-medium: 16px;
+  --radius-large: 24px;
+  --shadow-soft: 0 8px 30px rgba(34, 34, 42, 0.08);
+  --max: 1160px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--color-cream); color: var(--color-charcoal); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+.proto-tag { position: sticky; top: 0; z-index: 50; background: var(--color-charcoal); color: #fff; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 24px; text-align: center; }
+
+/* Placeholder photography — deliberately NOT the final visual system. Diagonal texture + camera tag make that unmistakable. */
+.ph {
+  border-radius: var(--radius-large);
+  position: relative;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.35) 0 2px, transparent 2px 14px),
+    linear-gradient(150deg, #F0DFCB 0%, var(--color-soft-lilac) 55%, var(--color-lavender) 100%);
+}
+.ph::after {
+  content: "📷 " attr(data-cap);
+  position: absolute; left: 10px; bottom: 10px;
+  font-size: 0.6rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--color-charcoal); background: rgba(255,255,255,0.8); padding: 3px 9px; border-radius: 999px;
+}
+.ph[data-cap=""]::after, .ph:not([data-cap])::after { content: "📷 photo placeholder"; }
+
+/* Graceful fallback when a hotlinked image (e.g. signed/expiring TikTok CDN thumbnail) fails to load */
+.img-fallback {
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.35) 0 2px, transparent 2px 14px),
+    linear-gradient(150deg, #F0DFCB 0%, var(--color-soft-lilac) 55%, var(--color-lavender) 100%);
+  position: relative;
+}
+.img-fallback::after {
+  content: "📷 image unavailable — send a real photo";
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  font-size: 0.6rem; font-weight: 600; text-align: center; width: 80%;
+  color: var(--color-charcoal); background: rgba(255,255,255,0.82); padding: 5px 9px; border-radius: 8px;
+}
+
+/* Content Cover System — Reen's real approved TikTok/Reels/Pinterest cover treatment, per CONTENT_COVER_SYSTEM.md. Photo layer is still placeholder (no real photos yet); the masthead/scrim/typography/bracket ARE the real, approved system. */
+.content-cover { position: relative; width: 100%; aspect-ratio: 9/16; overflow: hidden; border-radius: 0; }
+.cover-photo {
+  position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.35) 0 2px, transparent 2px 14px),
+    linear-gradient(150deg, #F0DFCB 0%, var(--color-soft-lilac) 55%, var(--color-lavender) 100%);
+}
+.cover-photo::after {
+  content: "📷 photo placeholder — cover system is real";
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  font-size: 0.58rem; font-weight: 600; letter-spacing: 0.04em; text-align: center;
+  color: var(--color-charcoal); background: rgba(255,255,255,0.82); padding: 5px 9px; border-radius: 8px; width: 78%;
+}
+.cover-wash { position: absolute; inset: 0; background: linear-gradient(200deg, rgba(109,53,181,0.28), rgba(34,34,42,0.15) 55%, rgba(34,34,42,0.75) 100%); }
+/* Masthead/scrim text overlay turned off (2026) — real content uses actual photos now, not placeholders needing a simulated cover. Reen's real cover system (CONTENT_COVER_SYSTEM.md) bakes this text into exported PNGs instead; re-enable per-item by removing "display:none" once a real exported cover image replaces the plain photo. */
+.cover-masthead { display: none; position: absolute; top: 0; left: 0; right: 0; height: 13%; min-height: 26px; background: rgba(34,34,42,0.82); align-items: center; justify-content: space-between; padding: 0 6%; z-index: 2; }
+.cover-wordmark { font-family: var(--font-heading); font-weight: 700; font-size: clamp(0.5rem, 2.1vw, 0.7rem); letter-spacing: 0.14em; color: #fff; white-space: nowrap; }
+.cover-category { font-family: var(--font-body); font-weight: 500; font-size: clamp(0.46rem, 1.9vw, 0.62rem); letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-soft-lilac); white-space: nowrap; }
+.cover-scrim { display: none; position: absolute; left: 0; right: 0; bottom: 0; height: 38%; background: linear-gradient(to top, rgba(34,34,42,0.92) 0%, transparent 100%); flex-direction: column; justify-content: flex-end; padding: 14px 14px 12px; z-index: 2; }
+.cover-kicker { font-family: var(--font-body); font-weight: 600; font-size: clamp(0.48rem, 1.7vw, 0.6rem); letter-spacing: 0.14em; text-transform: uppercase; color: #F0E6F8; margin: 0 0 4px; }
+.cover-title { font-family: var(--font-heading); font-weight: 800; font-size: clamp(0.8rem, 3.2vw, 1.05rem); line-height: 1.12; color: #fff; margin: 0; }
+.cover-bracket { position: absolute; bottom: 12%; right: 5%; width: 20px; height: 20px; border-right: 1.5px solid; border-bottom: 1.5px solid; z-index: 2; }
+.content-cover[data-cat="beauty"] .cover-bracket { border-color: var(--color-lavender); }
+.content-cover[data-cat="fashion"] .cover-bracket { border-color: var(--color-royal-purple); }
+.content-cover[data-cat="hair"] .cover-bracket, .content-cover[data-cat="home"] .cover-bracket, .content-cover[data-cat="creator"] .cover-bracket { display: none; }
+.content-cover .play-badge { position: absolute; top: 10px; right: 10px; width: 24px; height: 24px; background: rgba(0,0,0,0.45); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; z-index: 3; }
+/* Partial stopgap only — biases existing TikTok auto-thumbnails toward the top of frame where a face is more likely to be. Doesn't fix full-body/outfit shots with no face near the top; real face/neck-up framing needs a real photo, not a crop trick. */
+.content-cover img { object-position: 50% 18%; }
+
+/* Placeholder copy — explicit, not passed off as real */
+.placeholder-copy { border: 1.5px dashed var(--color-lavender); border-radius: var(--radius-small); padding: 3px 8px; background: rgba(233,221,243,0.35); }
+.placeholder-tag { display: inline-block; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-royal-purple); background: var(--color-light-lavender); padding: 3px 9px; border-radius: 999px; margin-bottom: 8px; }
+.stat-placeholder { border: 1.5px dashed rgba(255,255,255,0.3); border-radius: var(--radius-small); padding: 10px 6px; text-align: center; }
+.stat-placeholder p { margin: 0; font-size: 0.68rem; color: rgba(255,255,255,0.55); line-height: 1.4; }
+
+/* Nav */
+header.site-nav { padding: 18px 0; background: var(--color-cream); position: sticky; top: 0; z-index: 40; }
+.nav-row { display: flex; align-items: center; gap: 14px; }
+.avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(150deg, #F0DFCB, var(--color-lavender)); flex-shrink: 0; }
+.wordmark { font-family: var(--font-heading); font-weight: 700; font-size: 1.2rem; text-decoration: none; color: var(--color-charcoal); }
+.nav-links { display: none; }
+@media (min-width: 860px) { .nav-links { display: flex; gap: 26px; list-style: none; margin: 0 0 0 20px; padding: 0; } .nav-links a { font-size: 0.85rem; font-weight: 500; color: var(--color-charcoal); text-decoration: none; } .nav-links a:hover { color: var(--color-royal-purple); } }
+.nav-cta { margin-left: auto; font-weight: 600; font-size: 0.82rem; color: var(--color-royal-purple); text-decoration: none; border: 1.5px solid var(--color-royal-purple); padding: 9px 18px; border-radius: 999px; white-space: nowrap; }
+
+section { padding: 64px 0; }
+.section-head { margin-bottom: 28px; }
+.section-kicker { font-weight: 600; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-royal-purple); margin: 0 0 8px; }
+.section-title { font-family: var(--font-heading); font-weight: 700; font-size: clamp(1.4rem, 2.8vw, 1.95rem); margin: 0; }
+.section-link { font-weight: 600; font-size: 0.8rem; color: var(--color-royal-purple); text-decoration: none; white-space: nowrap; }
+
+/* Hero — ME first */
+.hero-ph { aspect-ratio: 16/10; max-height: 600px; }
+.hero-copy { position: absolute; left: 5%; bottom: 8%; max-width: 480px; }
+.hero-kicker { font-family: var(--font-body); font-weight: 600; font-size: 0.95rem; color: #fff; opacity: 0.95; margin: 0 0 10px; text-shadow: 0 1px 12px rgba(0,0,0,0.18); }
+.hero-greeting { font-family: var(--font-heading); font-weight: 700; font-size: clamp(1.5rem, 3.6vw, 2.5rem); line-height: 1.15; color: #fff; margin: 0 0 12px; text-shadow: 0 2px 20px rgba(0,0,0,0.2); }
+.hero-copy p.sub { color: #fff; opacity: 0.95; font-size: 1rem; margin: 0 0 20px; text-shadow: 0 1px 12px rgba(0,0,0,0.18); }
+.hero-ph::before { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,10,26,0.55) 0%, rgba(20,10,26,0.02) 60%); z-index: 0; }
+.btn-cream { display: inline-flex; align-items: center; gap: 8px; background: #fff; color: var(--color-charcoal); font-weight: 600; font-size: 0.85rem; padding: 12px 22px; border-radius: 999px; text-decoration: none; position: relative; z-index: 1; }
+.btn-solid { background: var(--color-royal-purple); color: #fff; }
+
+/* Hotspot tagged grid — works on hover (desktop) AND tap (mobile, via JS toggling .dot--active) */
+.tag-grid { display: grid; gap: 16px; grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 760px) { .tag-grid { grid-template-columns: repeat(4, 1fr); } .tag-grid .span2 { grid-column: span 2; grid-row: span 2; } }
+.tag-photo { position: relative; aspect-ratio: 1/1; }
+.tag-grid .span2 .tag-photo { height: 100%; }
+.dot { position: absolute; width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.95); border: 2px solid var(--color-royal-purple); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: var(--color-royal-purple); cursor: pointer; box-shadow: 0 2px 10px rgba(34,34,42,0.18); }
+.dot-popover { position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: var(--color-charcoal); color: #fff; font-size: 0.74rem; font-weight: 500; padding: 8px 12px; border-radius: 10px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.15s ease; z-index: 5; }
+.dot:hover .dot-popover, .dot--active .dot-popover { opacity: 1; }
+.tag-hint { font-size: 0.78rem; color: var(--color-text-secondary); margin-top: 16px; }
+.tag-hint .desktop-only { display: none; }
+.tag-hint .mobile-only { display: inline; }
+@media (min-width: 700px) { .tag-hint .desktop-only { display: inline; } .tag-hint .mobile-only { display: none; } }
+
+/* Shop My Content — repeatable card system */
+.content-card-grid { display: grid; gap: 20px; grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 860px) { .content-card-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .content-card-grid { grid-template-columns: 1fr; } }
+.content-card { text-decoration: none; color: inherit; display: block; background: #fff; border-radius: var(--radius-medium); overflow: hidden; box-shadow: var(--shadow-soft); }
+.content-card .ph { aspect-ratio: 9/13; border-radius: 0; }
+.content-card .ph::before { content: "▶"; position: absolute; top: 12px; right: 12px; width: 26px; height: 26px; background: rgba(0,0,0,0.45); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; }
+.cc-body { padding: 12px 14px 16px; }
+.cc-body h4 { font-family: var(--font-heading); font-weight: 600; font-size: 0.9rem; margin: 0 0 6px; line-height: 1.35; }
+.cc-tags { font-size: 0.72rem; color: var(--color-royal-purple); font-weight: 600; margin: 0; }
+
+/* Reviews teaser */
+.review-strip { display: grid; gap: 18px; grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 900px) { .review-strip { grid-template-columns: repeat(2, 1fr); } }
+.review-mini { text-decoration: none; color: inherit; }
+.review-mini .ph { aspect-ratio: 4/3; margin-bottom: 10px; }
+.review-mini h4 { font-family: var(--font-heading); font-size: 0.9rem; margin: 0; line-height: 1.35; }
+
+/* Explore tiles */
+.world-grid { display: grid; gap: 20px; grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 760px) { .world-grid { grid-template-columns: repeat(5, 1fr); } }
+.world-tile { text-decoration: none; color: inherit; text-align: center; }
+.world-tile .ph { aspect-ratio: 1/1; margin-bottom: 10px; }
+.world-tile .ph::after { display: none; }
+.world-tile-name { font-family: var(--font-heading); font-weight: 600; font-size: 0.9rem; margin: 0; }
+
+/* About / Work with me teaser */
+.about-flex { display: grid; gap: 36px; grid-template-columns: 1fr; align-items: center; }
+@media (min-width: 860px) { .about-flex { grid-template-columns: 0.8fr 1.2fr; } }
+.about-flex .ph { aspect-ratio: 4/5; }
+.about-flex p.prose { font-size: 1rem; line-height: 1.7; color: var(--color-text-secondary); }
+.wwm-band { background: var(--color-charcoal); color: #fff; border-radius: var(--radius-large); margin: 0 auto; max-width: var(--max); padding: 56px 40px; text-align: center; }
+.wwm-band h2 { font-family: var(--font-heading); font-size: clamp(1.5rem, 3vw, 2rem); margin: 0 0 14px; }
+.wwm-band p { color: rgba(255,255,255,0.75); max-width: 440px; margin: 0 auto 22px; }
+
+footer.site-footer { padding: 56px 0 28px; }
+.footer-grid { display: grid; gap: 32px; grid-template-columns: 1.4fr repeat(3, 1fr); }
+@media (max-width: 700px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+.footer-grid h5 { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-royal-purple); margin: 0 0 12px; }
+.footer-grid a { display: block; color: var(--color-charcoal); text-decoration: none; font-size: 0.86rem; margin-bottom: 9px; opacity: 0.75; }
+.footer-bottom { border-top: 1px solid var(--color-light-lavender); margin-top: 32px; padding-top: 20px; font-size: 0.76rem; color: var(--color-text-secondary); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; }
+
+/* SHOP / BEAUTY — editorial-commerce hybrid */
+.cat-page-intro { max-width: 620px; }
+.cat-page-intro p { font-size: 1.02rem; line-height: 1.7; color: var(--color-text-secondary); }
+.repurchase-band { background: #fff; margin: 40px 0; border-radius: var(--radius-large); padding: 32px; }
+.repurchase-grid { display: grid; gap: 18px; grid-template-columns: repeat(3, 1fr); margin-top: 20px; }
+@media (max-width: 760px) { .repurchase-grid { grid-template-columns: 1fr; } }
+.rp-item { display: flex; gap: 12px; align-items: center; }
+.rp-item .ph { width: 68px; height: 68px; flex-shrink: 0; border-radius: var(--radius-small); }
+.rp-item .ph::after { display: none; }
+.rp-name { font-family: var(--font-heading); font-weight: 600; font-size: 0.88rem; margin: 0 0 3px; }
+.rp-note { font-size: 0.78rem; color: var(--color-text-secondary); margin: 0; font-style: italic; }
+.routine-strip { display: flex; gap: 16px; overflow-x: auto; margin: 24px -24px 0; padding: 4px 24px 8px; }
+.routine-step { flex: 0 0 180px; text-align: center; position: relative; }
+.routine-step .ph { aspect-ratio: 1/1; margin-bottom: 10px; }
+.routine-num { position: absolute; top: 8px; left: 8px; width: 24px; height: 24px; border-radius: 50%; background: var(--color-royal-purple); color: #fff; font-family: var(--font-heading); font-weight: 700; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; z-index: 1; }
+.routine-step p { font-size: 0.78rem; font-weight: 600; margin: 0; }
+.chip-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px; }
+.chip { font-size: 0.82rem; font-weight: 600; padding: 9px 18px; border-radius: 999px; border: 1.5px solid var(--color-light-lavender); background: #fff; color: var(--color-charcoal); cursor: pointer; }
+.chip.active { background: var(--color-royal-purple); border-color: var(--color-royal-purple); color: #fff; }
+.product-grid { display: grid; gap: 22px; grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 700px) { .product-grid { grid-template-columns: repeat(4, 1fr); } }
+.product-card { background: #fff; border-radius: var(--radius-medium); box-shadow: var(--shadow-soft); overflow: hidden; transition: opacity 0.15s ease; }
+.product-card.is-hidden { display: none; }
+.product-card .ph { aspect-ratio: 1/1; border-radius: 0; }
+.pc-body { padding: 14px 15px 16px; }
+.ribbon { display: inline-block; background: var(--color-lavender-deep); color: #fff; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 9px; border-radius: 999px; margin-bottom: 8px; }
+.price-row { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+.price { font-weight: 600; font-size: 0.85rem; }
+.shop-btn { font-weight: 600; font-size: 0.76rem; color: var(--color-royal-purple); text-decoration: none; }
+.worth-it-band { display: grid; gap: 20px; grid-template-columns: 1fr 1fr; margin: 48px 0; }
+@media (max-width: 700px) { .worth-it-band { grid-template-columns: 1fr; } }
+.wi-card { border-radius: var(--radius-large); padding: 28px; }
+.wi-card.worth { background: var(--color-light-lavender); }
+.wi-card.skip { background: var(--color-soft-gray); }
+.wi-label { font-family: var(--font-heading); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 10px; }
+.wi-card.worth .wi-label { color: var(--color-royal-purple); }
+.wi-card.skip .wi-label { color: var(--color-text-secondary); }
+.wi-card h4 { font-family: var(--font-heading); font-size: 1.05rem; margin: 0 0 8px; }
+.wi-card p { font-size: 0.88rem; color: var(--color-text-secondary); margin: 0; line-height: 1.55; }
+
+/* REVIEW DETAIL template */
+.moment-cap { font-size: 0.82rem; color: var(--color-text-secondary); font-style: italic; margin: 0 0 18px; }
+.detail-flex { display: grid; gap: 40px; grid-template-columns: 1fr; padding: 48px 0; }
+@media (min-width: 900px) { .detail-flex { grid-template-columns: 1.3fr 0.9fr; align-items: start; } }
+.prose p { font-size: 1.02rem; line-height: 1.75; color: var(--color-charcoal); margin: 0 0 20px; }
+.pull-quote { font-family: var(--font-heading); font-weight: 600; font-size: 1.3rem; line-height: 1.4; color: var(--color-royal-purple); border-left: 3px solid var(--color-royal-purple); padding-left: 20px; margin: 28px 0; }
+.shelf-title { font-weight: 600; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-secondary); margin: 0 0 16px; }
+.inline-pick { display: flex; gap: 14px; padding: 14px; background: #fff; border-radius: var(--radius-medium); box-shadow: var(--shadow-soft); margin-bottom: 14px; }
+.inline-pick .ph { width: 80px; height: 80px; flex-shrink: 0; border-radius: var(--radius-small); }
+.inline-pick .ph::after { display: none; }
+.also-grid { display: grid; gap: 18px; grid-template-columns: repeat(3, 1fr); margin-top: 18px; }
+@media (max-width: 760px) { .also-grid { grid-template-columns: 1fr; } }
+.simple-item { display: flex; align-items: center; gap: 16px; background: #fff; border-radius: var(--radius-medium); padding: 14px; box-shadow: var(--shadow-soft); }
+.simple-item .ph { width: 64px; height: 64px; flex-shrink: 0; border-radius: var(--radius-small); }
+.simple-item .ph::after { display: none; }
+.simple-name { font-family: var(--font-heading); font-weight: 600; font-size: 0.88rem; margin: 0 0 3px; }
+
+/* WORK WITH ME — no fake metrics */
+.wwm-hero-band { text-align: center; max-width: 640px; margin: 0 auto; }
+.wwm-hero-band p.prose { font-size: 1.05rem; line-height: 1.7; color: var(--color-text-secondary); }
+.track-grid { display: grid; gap: 28px; grid-template-columns: 1fr; margin-top: 48px; }
+@media (min-width: 900px) { .track-grid { grid-template-columns: 1fr 1fr; align-items: stretch; } }
+.track-card { background: #fff; border-radius: var(--radius-large); padding: 36px 32px; box-shadow: var(--shadow-soft); display: flex; flex-direction: column; }
+.track-card.alt { background: var(--color-charcoal); color: #fff; }
+.track-num { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; background: var(--color-light-lavender); color: var(--color-royal-purple); font-family: var(--font-heading); font-weight: 700; font-size: 0.9rem; margin-bottom: 18px; }
+.track-card.alt .track-num { background: var(--color-royal-purple); color: #fff; }
+.track-title { font-family: var(--font-heading); font-weight: 700; font-size: 1.4rem; margin: 0 0 10px; }
+.track-desc { font-size: 0.95rem; line-height: 1.65; color: var(--color-text-secondary); margin: 0 0 24px; }
+.track-card.alt .track-desc { color: rgba(255,255,255,0.75); }
+.portfolio-mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+.portfolio-mini-grid .ph { aspect-ratio: 9/16; border-radius: var(--radius-small); }
+.portfolio-mini-grid .ph::after { font-size: 0.5rem; padding: 2px 6px; }
+.stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; padding: 20px 0; border-top: 1px solid rgba(255,255,255,0.14); border-bottom: 1px solid rgba(255,255,255,0.14); }
+.collab-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.collab-chip { font-size: 0.76rem; font-weight: 500; padding: 6px 13px; border-radius: 999px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); }
+.track-cta { margin-top: auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; font-size: 0.88rem; padding: 13px 24px; border-radius: 999px; text-decoration: none; }
+.track-card:not(.alt) .track-cta { background: var(--color-royal-purple); color: #fff; }
+.track-card.alt .track-cta { background: #fff; color: var(--color-charcoal); }
+.wwm-note { text-align: center; font-size: 0.82rem; color: var(--color-text-secondary); max-width: 480px; margin: 32px auto 0; }
+</style>
+</head>
+<body>
+
+<div class="proto-tag">CONCEPT E — REFINED IA (Shop / Reviews / My World / About / Work With Me) · exploration, not final</div>
+
+<!-- ============ HOMEPAGE — ME → MY WORLD → LOVING → CONTENT → REVIEWS → STORY → SHOP ============ -->
+<header class="site-nav">
+  <div class="wrap nav-row">
+    <div class="avatar"></div>
+    <a href="#" class="wordmark">Queen Reen</a>
+    <ul class="nav-links">
+      <li><a href="#">Shop</a></li>
+      <li><a href="#">Reviews</a></li>
+      <li><a href="#">My World</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Work With Me</a>
+  </div>
+</header>
+
+<!-- ME -->
+<section style="padding-top:8px; padding-bottom:8px;">
+  <div class="wrap" style="position:relative;">
+    <div class="ph hero-ph">
+      <div class="hero-copy">
+        <p class="hero-kicker">Hi, I'm Reen 👋</p>
+        <h1 class="hero-greeting">Honest Reviews. Beautiful Finds. Products Worth Buying.</h1>
+        <p class="sub">Beauty, style, and home — welcome to my little corner of the internet. Honest opinions only, promise.</p>
+        <a href="#" class="btn-cream">See What I'm Loving →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MY WORLD / WHAT I'M LOVING — signature hotspot collage -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="section-kicker">What I'm Loving Lately</p>
+      <h2 class="section-title">A little bit of everything, mixed together the way it naturally is for me</h2>
+    </div>
+    <div class="tag-grid">
+      <div class="tag-photo span2">
+        <img src="https://p16-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/o4IAeqKErClAjARg4CQACFEEuWDQtXA2YfA97V~tplv-tiktokx-dmt-logom:tos-useast8-i-0068-tx2/oIAQAI7Ajd0IUAte8AevCL3KbPFGIEL5qYmIe8.image?dr=9634&x-expires=1785369600&x-signature=oIOcEG4lHYrqfrnXHrKSQMNFUL0%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Deep V Neck Dress" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:var(--radius-large);">
+        <a class="dot" href="https://www.tiktok.com/t/ZP9rvhJkLc1rx-MYISB/" target="_blank" rel="noopener" style="top:55%; left:50%; text-decoration:none;">1<span class="dot-popover">Deep V Neck Dress</span></a>
+      </div>
+      <div class="tag-photo">
+        <img src="https://product-images-cdn.liketoknow.it/g0xuO.MhWraH7sImbxafuOWx25SBiZvrrT9LWUcPHLKSwsncPrGhvSqvIUu6FSaZSB0oXpIIa8_UObVgZmzhTvNdyaCkCQXtzwWNEccAv6nzgdXgpXh8GXrwo3DoXTjEva57qjyLh0K85zMWc5MgNVeQhrjBIb1_3.BdMABm2eR7t5KNEpsQ.nlbY6E-?v=0&auto=format&fm=jpg&w=450&q=80&dpr=1" alt="Smocked Strappy Dress" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:var(--radius-large);">
+        <a class="dot" href="https://on.ltk.com/+3Hz2vSUKa1KXLcEAYzGlFg?li=3070682f-857a-11f1-ac2e-22c7c7c40575" target="_blank" rel="noopener" style="top:55%; left:50%; text-decoration:none;">2<span class="dot-popover">Smocked Strappy Dress (H&amp;M)</span></a>
+      </div>
+      <div class="tag-photo">
+        <img src="https://p16-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/o8Bvj3NaASAUji4MB5E2ARoAiIclidpAA9E1i~tplv-tiktokx-origin.image?dr=9636&x-expires=1784941200&x-signature=E2Pr9Zlw3Ser1aYKAB6rphfj6TI%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Prequel Lip Visor" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:var(--radius-large);">
+        <a class="dot" href="https://www.tiktok.com/view/product/1731077691221053918?_d=emlj08e9hka4cd" target="_blank" rel="noopener" style="top:60%; left:48%; text-decoration:none;">3<span class="dot-popover">Prequel SPF 30 Lip Visor</span></a>
+      </div>
+      <div class="tag-photo">
+        <img src="https://p19-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/oc22eAqDUEzmapZFEAAcQAI8IID9fv6AWjQbCf~tplv-tiktokx-dmt-logom:tos-useast8-i-0068-tx2/ocAj5culGQCteeY2A1LAqEj3wEe3UAIIILA8Iv.image?dr=9634&x-expires=1784941200&x-signature=m%2FH0IfDfPEASypXkIwAdEm3CVKg%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Miche anti-frizz gel" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:var(--radius-large);">
+        <a class="dot" href="https://www.tiktok.com/t/ZP9rvhxwdUABF-7q7oq/" target="_blank" rel="noopener" style="top:52%; left:50%; text-decoration:none;">4<span class="dot-popover">Miche Anti-Humidity Gel</span></a>
+      </div>
+      <div class="tag-photo">
+        <img src="https://p19-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/oMyDFBiMlEgiziYUQIJFEfUkVrSVqQAseEaRAI~tplv-tiktokx-dmt-logom:tos-useast8-i-0068-tx2/owVKUFsiA2IrAIkEPBi1AVBBACKgAi8ifSJCQy.image?dr=9634&x-expires=1785380400&x-signature=1OBgZeOS8o1zEDSuV1ndR%2F9y0SU%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="64oz glass water bottle" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:var(--radius-large);">
+        <a class="dot" href="https://www.tiktok.com/t/ZP9rvhXp3k7T3-BHZlg/" target="_blank" rel="noopener" style="top:55%; left:50%; text-decoration:none;">5<span class="dot-popover">64oz Glass Water Bottle</span></a>
+      </div>
+    </div>
+    <p class="tag-hint">
+      <span class="desktop-only">Hover a dot to shop what's in each photo.</span>
+      <span class="mobile-only">Tap a dot to shop what's in each photo — tap again to close.</span>
+    </p>
+    <p style="font-size:0.78rem; color:var(--color-text-secondary); margin-top:8px;">Real photos, real links — a rotating handful of current favorites across categories. As more lifestyle photos come in (not just single-product video frames), this can grow into true multi-tag flat-lays; for now each photo is tagged with the one real product it actually shows.</p>
+  </div>
+</section>
+
+<!-- CONTENT — Shop My Content: the content that doesn't live in Shop (no product, or the full watch-then-shop story) -->
+<section class="wrap" style="background:transparent;">
+  <div class="section-head" style="display:flex; align-items:baseline; justify-content:space-between;">
+    <div><p class="section-kicker">Shop My Content</p><h2 class="section-title">Watch it, then shop it</h2></div>
+  </div>
+  <div class="content-card-grid">
+    <a href="#real-prequel-example" class="content-card">
+      <div class="content-cover" data-cat="beauty">
+        <img src="https://p16-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/o8Bvj3NaASAUji4MB5E2ARoAiIclidpAA9E1i~tplv-tiktokx-origin.image?dr=9636&x-expires=1784941200&x-signature=E2Pr9Zlw3Ser1aYKAB6rphfj6TI%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Reen applying Prequel Lip Visor" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+        <span class="play-badge">▶</span>
+        <div class="cover-masthead"><span class="cover-wordmark">QUEEN REEN</span><span class="cover-category">Beauty</span></div>
+        <div class="cover-scrim"><p class="cover-kicker">Honest Review</p><h3 class="cover-title">Not a Gloss Girl, But a Hydrated Lips Girl</h3></div>
+        <div class="cover-bracket"></div>
+      </div>
+      <div class="cc-body"><h4>Prequel SPF 30 Lip Visor — full review</h4><p class="cc-tags">1 product, shop link, real caption</p></div>
+    </a>
+    <a href="#where-ive-been" class="content-card">
+      <div class="content-cover" data-cat="home">
+        <img src="https://p19-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/o4o6BA1jXqEffIQUDwLeICA4uhcPtMQIjdG7I1~tplv-tiktokx-dmt-logom:tos-useast8-i-0068-tx2/o800QQWWAeUjG9fDQAMAgeg5GDpADJGRAwQU8e.image?dr=9634&x-expires=1784941200&x-signature=OEG%2F%2BN0ke%2FgCxAULgUN9OSj8XSA%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Reen, coffee bar McCarran" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+        <span class="play-badge">▶</span>
+        <div class="cover-masthead"><span class="cover-wordmark">QUEEN REEN</span><span class="cover-category">Food + Places</span></div>
+        <div class="cover-scrim"><p class="cover-kicker">Where I've Been</p><h3 class="cover-title">6 Real Spots, Reno + Charlotte</h3></div>
+      </div>
+      <div class="cc-body"><h4>Where I've Been — coffee &amp; food finds</h4><p class="cc-tags">6 real places, no product needed</p></div>
+    </a>
+    <a href="#hair-diaries" class="content-card">
+      <div class="content-cover" data-cat="hair">
+        <img src="https://p19-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/oQAG6tqfRqEpDVEpCVDFdsFvAymYAA4I20eAQE~tplv-tiktokx-dmt-logom:tos-useast8-i-0068-tx2/oozDFCZyvEkAQDsFIAAyEf4sVeYdqQAixECRA8.image?dr=9634&x-expires=1785380400&x-signature=Yg403vCYVp4cAbf2YXnqkfKxozw%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Reen trying a wig for the first time" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+        <div class="cover-wash"></div>
+        <span class="play-badge">▶</span>
+        <div class="cover-masthead"><span class="cover-wordmark">QUEEN REEN</span><span class="cover-category">Hair / Results</span></div>
+        <div class="cover-scrim"><p class="cover-kicker">Hair / Results</p><h3 class="cover-title">My First Wig + a Sunday Trim</h3></div>
+      </div>
+      <div class="cc-body"><h4>Hair Diaries</h4><p class="cc-tags">2 real moments, no product to sell — just the experience</p></div>
+    </a>
+  </div>
+  <p class="tag-hint" style="margin-top:16px;">This section is for the content that isn't just "here's a product" — full reviews, real places, real experiences. Straightforward single-product content lives in Shop instead, where it's organized to actually browse.</p>
+</section>
+
+<!-- DISCOVERY — category entry -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="section-kicker">Explore</p>
+      <h2 class="section-title">Wander wherever you like</h2>
+    </div>
+    <div class="world-grid" style="grid-template-columns:repeat(4,1fr);">
+      <a href="#" class="world-tile"><img src="https://p16-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/o8Bvj3NaASAUji4MB5E2ARoAiIclidpAA9E1i~tplv-tiktokx-origin.image?dr=9636&x-expires=1784941200&x-signature=E2Pr9Zlw3Ser1aYKAB6rphfj6TI%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Beauty" style="width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:var(--radius-large); margin-bottom:10px;"><p class="world-tile-name">Beauty</p></a>
+      <a href="#" class="world-tile"><img src="https://p16-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/o4IAeqKErClAjARg4CQACFEEuWDQtXA2YfA97V~tplv-tiktokx-dmt-logom:tos-useast8-i-0068-tx2/oIAQAI7Ajd0IUAte8AevCL3KbPFGIEL5qYmIe8.image?dr=9634&x-expires=1785369600&x-signature=oIOcEG4lHYrqfrnXHrKSQMNFUL0%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Fashion" style="width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:var(--radius-large); margin-bottom:10px;"><p class="world-tile-name">Fashion</p></a>
+      <a href="#" class="world-tile"><img src="https://p19-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/oc22eAqDUEzmapZFEAAcQAI8IID9fv6AWjQbCf~tplv-tiktokx-dmt-logom:tos-useast8-i-0068-tx2/ocAj5culGQCteeY2A1LAqEj3wEe3UAIIILA8Iv.image?dr=9634&x-expires=1784941200&x-signature=m%2FH0IfDfPEASypXkIwAdEm3CVKg%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Hair" style="width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:var(--radius-large); margin-bottom:10px;"><p class="world-tile-name">Hair</p></a>
+      <a href="#" class="world-tile"><img src="https://p19-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/oMyDFBiMlEgiziYUQIJFEfUkVrSVqQAseEaRAI~tplv-tiktokx-dmt-logom:tos-useast8-i-0068-tx2/owVKUFsiA2IrAIkEPBi1AVBBACKgAi8ifSJCQy.image?dr=9634&x-expires=1785380400&x-signature=1OBgZeOS8o1zEDSuV1ndR%2F9y0SU%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Home & Lifestyle" style="width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:var(--radius-large); margin-bottom:10px;"><p class="world-tile-name">Home &amp; Lifestyle</p></a>
+    </div>
+    <p style="font-size:0.78rem; color:var(--color-text-secondary); margin-top:14px;">Creator Finds isn't shown yet — no real content for it so far. It'll get its own tile once there's something real to put there, same as any future category (Travel, Wellness, etc.).</p>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section style="background:#fff;">
+  <div class="wrap">
+    <div class="section-head" style="display:flex; align-items:baseline; justify-content:space-between;"><div><p class="section-kicker">Reviews</p><h2 class="section-title">Latest Honest Reviews</h2></div><a href="#" class="section-link">Read More →</a></div>
+    <div class="review-strip">
+      <a href="#" class="review-mini">
+        <div class="content-cover" data-cat="fashion" style="border-radius: var(--radius-medium); margin-bottom:10px;">
+          <img src="https://p19-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/ooaEgAWEMlIBAzBR6biJB2ikpYAAv78xAvWBl~tplv-tiktokx-dmt-logom:tos-useast8-i-0068-tx2/owIDqVAfzQNiECz3k0TE4TAAEBVMWXAE6AfFRJ.image?dr=9634&x-expires=1785369600&x-signature=icYzYrmZ8yBZ%2FJSJctI3H8vr%2FCg%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Black & White Dress" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+          <div class="cover-masthead"><span class="cover-wordmark">QUEEN REEN</span><span class="cover-category">Fashion</span></div>
+          <div class="cover-scrim"><p class="cover-kicker">Honest Review</p><h3 class="cover-title" style="font-size:0.85rem;">The Black &amp; White Dress, Reviewed</h3></div>
+          <div class="cover-bracket"></div>
+        </div>
+        <h4>"Not too fond of the material, but it gets the job done"</h4>
+      </a>
+      <a href="#hair-diaries" class="review-mini">
+        <div class="content-cover" data-cat="hair" style="border-radius: var(--radius-medium); margin-bottom:10px;">
+          <img src="https://contactqueenreen-jpg.github.io/queen-reen-site/Haircut%20at%20Different%20By%20Design.jpg" alt="Different By Design hair trim" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+          <div class="cover-wash"></div>
+          <div class="cover-masthead"><span class="cover-wordmark">QUEEN REEN</span><span class="cover-category">Hair / Results</span></div>
+          <div class="cover-scrim"><p class="cover-kicker">Hair / Results</p><h3 class="cover-title" style="font-size:0.85rem;">Sunday Walk-In Trim, Worth It</h3></div>
+        </div>
+        <h4>Found a natural hair salon that takes walk-ins — Different By Design</h4>
+      </a>
+      <a href="#" class="review-mini">
+        <div class="content-cover" data-cat="home" style="border-radius: var(--radius-medium); margin-bottom:10px;">
+          <img src="https://p16-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/oQUmKC0nQ5JKCjKIIrcYfIAdEjLRVqef8AKGqI~tplv-tiktokx-origin.image?dr=9636&x-expires=1785380400&x-signature=WbXz67gtLnX%2F2awo9lKmSwtmyr0%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Earring holder" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+          <div class="cover-masthead"><span class="cover-wordmark">QUEEN REEN</span><span class="cover-category">Home</span></div>
+          <div class="cover-scrim"><p class="cover-kicker">Home Edit</p><h3 class="cover-title" style="font-size:0.85rem;">The Earring Holder That Fixed My Chaos</h3></div>
+        </div>
+        <h4>"Another reason to buy more earrings" — the 360 rotating holder</h4>
+      </a>
+      <a href="#" class="review-mini">
+        <div class="content-cover" data-cat="beauty" style="border-radius: var(--radius-medium); margin-bottom:10px;">
+          <img src="https://product-images-cdn.liketoknow.it/3HZO4Y271v9sd0MJWXx1XxMtFV7F4uIs8ds_7uR7TXlUUU1IR30Wv_e_dn_PUqpJjB6xOvCtDvYwWVXMAP8afCgZp_USiepseqSkwBQf9jMW5c1TJrxSXikm3VedigTCKm4PvEy0OFn4boIUVShwIh_zKz8aJCq41jktOATJ7DvNp1TcQah2PHIAH2o-?v=0&auto=format&fm=jpg&w=450&q=80&dpr=1" alt="R&R Sun Serum" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+          <div class="cover-masthead"><span class="cover-wordmark">QUEEN REEN</span><span class="cover-category">Beauty</span></div>
+          <div class="cover-scrim"><p class="cover-kicker">Reen's Pick</p><h3 class="cover-title" style="font-size:0.85rem;">Tinted Mineral SPF, First Try</h3></div>
+          <div class="cover-bracket"></div>
+        </div>
+        <h4>Undefined Beauty R&amp;R Sun Serum — tinted mineral SPF 50</h4>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- STORY / TRUST -->
+<section>
+  <div class="wrap about-flex">
+    <div class="ph"></div>
+    <div>
+      <p class="section-kicker">My Story</p>
+      <h2 class="section-title" style="margin-bottom:18px;">Why I stopped keeping this stuff to myself</h2>
+      <p class="prose">I've never loved being the center of attention, and for a long time that kept me from leaning into beauty and style as anything more than something I quietly loved. But when compliments kept turning into "wait, what is that?", I realized how much I loved sharing the answer. Turns out the attention was never the point — helping someone find something they'll genuinely love is.</p>
+      <a href="#" class="btn-cream btn-solid" style="margin-top:8px;">Read My Full Story →</a>
+    </div>
+  </div>
+</section>
+
+<!-- SHOP / DEEPER EXPLORATION -->
+<section>
+  <div class="wrap"><div class="wwm-band" style="background:var(--color-light-lavender); color:var(--color-charcoal);">
+    <h2>Ready to shop?</h2>
+    <p style="color:var(--color-text-secondary);">Everything I've recommended, organized by category — beauty, fashion, hair, home, and more.</p>
+    <a href="#" class="btn-cream btn-solid">Shop All Categories →</a>
+  </div></div>
+</section>
+
+<section>
+  <div class="wrap"><div class="wwm-band">
+    <h2>Let's work together</h2>
+    <p>I'm selective about who I partner with — it has to be a brand I'd trust and use myself. If that sounds like you, I'd love to hear from you.</p>
+    <a href="#" class="btn-cream">Work With Me →</a>
+  </div></div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div><a href="#" class="wordmark">Queen Reen</a><p style="font-size:0.85rem; color:var(--color-text-secondary); margin-top:12px; max-width:280px;">Beauty, style, and home — exactly as I actually live it.</p></div>
+    <div><h5>Explore</h5><a href="#">Shop</a><a href="#">Reviews</a><a href="#">My World</a></div>
+    <div><h5>Queen Reen</h5><a href="#">About</a><a href="#">Work With Me</a><a href="#">Contact</a></div>
+    <div><h5>Follow</h5><a href="#">TikTok</a><a href="#">Instagram</a><a href="#">YouTube</a></div>
+  </div>
+  <div class="wrap footer-bottom"><span>© 2026 Queen Reen. Some links are affiliate links — see disclosure.</span><span>Privacy Policy · Affiliate Disclosure</span></div>
+</footer>
+
+<!-- ============ SHOP / BEAUTY — editorial-commerce hybrid, real data ============ -->
+<div class="proto-tag" style="background:var(--color-royal-purple);">SHOP — BEAUTY (real spreadsheet data)</div>
+<div class="wrap" style="padding-top:48px;">
+  <p class="section-kicker">Shop</p>
+  <h1 class="section-title" style="font-size:2rem; margin-bottom:16px;">Beauty</h1>
+  <div class="cat-page-intro"><p>Everything below is real — pulled from my own links, tested and tried before it ever made it here.</p></div>
+
+  <p class="section-kicker" style="margin-top:40px; margin-bottom:2px;">Real Routine</p>
+  <h3 class="section-title" style="font-size:1.15rem; margin-bottom:4px;">Target Dupes for La Roche-Posay &amp; Differin</h3>
+  <p style="font-size:0.9rem; color:var(--color-text-secondary); margin:0 0 16px;">Real caption, real photo: "Started using these recently to see how they compare and so far I'm loving the results."</p>
+  <div class="repurchase-band" style="display:grid; grid-template-columns:1fr 1.3fr; gap:28px; align-items:center;">
+    <img src="https://product-images-cdn.liketoknow.it/3HZO4Y271v9sd0MJWXx1XxMtFV7F4uIs8ds_7uR7TXlUUU1IR30Wv_e_dn_PUqpJjB6xOvCtDvYwWVXMAP8afCgZp_USiepseqSkwBQf9jMW5c1TJrxSXikm3VedigTCKm4PvEy0OFn4boIUVShwIh_zKz8aJCq41jktOATJ7DvNp1TcQah2PHIAH2o-?v=0&auto=format&fm=jpg&w=450&q=80&dpr=1" alt="Skincare routine shelf" style="width:100%; border-radius:var(--radius-medium); aspect-ratio:4/3; object-fit:cover;">
+    <div class="repurchase-grid" style="grid-template-columns:1fr;">
+      <div class="rp-item"><div><p class="rp-name">up&amp;up Hydrating Gentle Face Wash</p><p class="rp-note">With ceramide · Target</p></div><a href="https://on.ltk.com/+sI_zfMUDczJv72ekKNEofQ?li=f7699e55-87ea-11f1-bd0f-a2a03ec1c19a" target="_blank" rel="noopener" class="shop-btn" style="margin-left:auto;">Shop →</a></div>
+      <div class="rp-item"><div><p class="rp-name">up&amp;up Deep Repair Face Moisturizer</p><p class="rp-note">Ceramide + niacinamide · Target</p></div><a href="https://on.ltk.com/+ZDAZJc0od_67zpPDzFjrjQ?li=f7699e55-87ea-11f1-bd0f-a2a03ec1c19a" target="_blank" rel="noopener" class="shop-btn" style="margin-left:auto;">Shop →</a></div>
+      <div class="rp-item"><div><p class="rp-name">Differin Gel</p><p class="rp-note">0.1% Adapalene · Walmart</p></div><a href="https://on.ltk.com/+x3pGusgCu-Q9EQM0kfcf-Q?li=f7699e55-87ea-11f1-bd0f-a2a03ec1c19a" target="_blank" rel="noopener" class="shop-btn" style="margin-left:auto;">Shop →</a></div>
+    </div>
+  </div>
+
+  <p class="section-kicker" style="margin-top:48px; margin-bottom:14px;">Shop the Full Beauty Edit</p>
+  <div class="chip-row" id="filterChips">
+    <span class="chip active" data-filter="all">All</span>
+    <span class="chip" data-filter="skincare">Skincare</span>
+    <span class="chip" data-filter="makeup">Makeup</span>
+    <span class="chip" data-filter="body">Body</span>
+  </div>
+  <div class="product-grid" id="productGrid">
+    <div class="product-card" data-cat="skincare">
+      <img src="https://contactqueenreen-jpg.github.io/queen-reen-site/Prequel%20Lip%20Visor%20Sunscreen%202.jpg" alt="Prequel SPF 30 Lip Visor" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><span class="ribbon">Reen's Pick</span><p class="rp-name">Prequel SPF 30 Lip Visor</p><p class="rp-note">Clear, easy to apply, hydrates with SPF built in.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/view/product/1731077691221053918?_d=emlj08e9hka4cd" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+    <div class="product-card" data-cat="skincare">
+      <img src="https://contactqueenreen-jpg.github.io/queen-reen-site/R%26R%20Sun%20Serum.jpg" alt="R&R Sun Serum" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><p class="rp-name">Undefined Beauty R&amp;R Sun Serum</p><p class="rp-note">Tinted mineral SPF 50 — blended smooth, no scary cast.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://on.ltk.com/+Asgi5JqAgCei-30nfHz_PA?li=0bbf8cf2-88c8-11f1-bcfa-728e873064bd" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+    <div class="product-card" data-cat="makeup">
+      <img src="https://contactqueenreen-jpg.github.io/queen-reen-site/Wonderskin%20Kip%20Stain%20%26%20Lip%20Liner.jpg" alt="Wonderskin Perfect Lip Duo" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><p class="rp-name">Wonderskin Perfect Lip Duo</p><p class="rp-note">Lip stain + glitter gloss — cute and long-lasting.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvhdoTwmTN-S6BGr/" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+    <div class="product-card" data-cat="makeup">
+      <img src="https://contactqueenreen-jpg.github.io/queen-reen-site/Maybeline%20Mascara.jpg" alt="Maybelline Sky Tubes Mascara" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><span class="ribbon">Reen's Pick</span><p class="rp-name">Maybelline Sky Tubes Mascara</p><p class="rp-note">Tubing formula — 24hr length, smudge-proof.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvhLN8pcc6-9JwS4/" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+    <div class="product-card" data-cat="makeup">
+      <img src="https://contactqueenreen-jpg.github.io/queen-reen-site/Wonderskin%20Lipstain.jpg" alt="Wonderskin Wonder Blading Lip Masque" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><p class="rp-name">Wonderskin Wonder Blading Lip Masque</p><p class="rp-note">Vegan, long-lasting liquid blading color.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvhHXSkDsK-oFkCu/" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+    <div class="product-card" data-cat="body">
+      <img src="https://p16-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/oweAIIALfEAJBjAA0LImOgIzoKnlGeFEqBGU2N~tplv-tiktokx-origin.image?dr=9636&x-expires=1785380400&x-signature=av230vnzHPIyrjNuk0LWuSebsDA%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Fenty Vanilla Butta Whip" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><span class="ribbon">Reen's Pick</span><p class="rp-name">Fenty Skin Butta Drop Whipped Oil Body Cream</p><p class="rp-note">Vanilla Dream — soft, hydrated, not greasy.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvhcuGL8TC-1NmLs/" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+    <div class="product-card" data-cat="makeup">
+      <img src="https://contactqueenreen-jpg.github.io/queen-reen-site/The%20Lip%20Bar%20Lip%20Stain.jpg" alt="The Lip Bar liquid matte lipstick" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><p class="rp-name">The Lip Bar Liquid Matte Lipstick</p><p class="rp-note">"A faithful since the beginning" — vegan, long-lasting.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/view/product/1732402030042059445?_d=emlj08e9hka4cd" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+    <div class="product-card" data-cat="skincare">
+      <div class="ph" data-cap="photo"></div>
+      <div class="pc-body"><p class="rp-name">Bikini Trimmer &amp; Epilator</p><p class="rp-note placeholder-copy">Real link, no video for this one yet.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvrWBFcSn8-0Hg3Z/" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+  </div>
+  <div style="height:32px;"></div>
+</div>
+
+<!-- ============ SHOP / FASHION — real data from Reen's spreadsheet ============ -->
+<div class="proto-tag" style="background:var(--color-royal-purple);">SHOP — FASHION (real spreadsheet data)</div>
+<div class="wrap" style="padding-top:48px;">
+  <p class="section-kicker">Shop</p>
+  <h1 class="section-title" style="font-size:2rem; margin-bottom:16px;">Fashion</h1>
+  <div class="cat-page-intro"><p>Real finds pulled straight from Reen's own links spreadsheet — real photos, real captions, real links where she has them.</p></div>
+
+  <p class="section-kicker" style="margin-top:40px; margin-bottom:4px;">Complete — real photo, real link, real price pending</p>
+  <div class="product-grid">
+    <div class="product-card">
+      <img src="https://product-images-cdn.liketoknow.it/g0xuO.MhWraH7sImbxafuOWx25SBiZvrrT9LWUcPHLKSwsncPrGhvSqvIUu6FSaZSB0oXpIIa8_UObVgZmzhTvNdyaCkCQXtzwWNEccAv6nzgdXgpXh8GXrwo3DoXTjEva57qjyLh0K85zMWc5MgNVeQhrjBIb1_3.BdMABm2eR7t5KNEpsQ.nlbY6E-?v=0&auto=format&fm=jpg&w=450&q=80&dpr=1" alt="Smocked Strappy Dress" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><p class="rp-name">Smocked Strappy Dress</p><p class="rp-note">H&amp;M · "Such a cute summer find — perfect for vacation or just everyday outfit when the sun is out."</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://on.ltk.com/+3Hz2vSUKa1KXLcEAYzGlFg?li=3070682f-857a-11f1-ac2e-22c7c7c40575" target="_blank" rel="noopener" class="shop-btn">Shop on LTK →</a></div></div>
+    </div>
+    <div class="product-card">
+      <img src="https://product-images-cdn.liketoknow.it/NPKSuVd1tcc3enPi1qMamVPMQ.TiFpbcFV_4Ene0EAOwiFsrDhsS_Dw.e21A.SKTmL2ttXxgbg.pIdct.ivd4g5wqjoB36xQPm2tgAUDSwxeGKZmgidqwqi5GkfHP4RBuQGhLFbDJ_9v9Rn4tJdRow63sFlpQMwuH90.FjDwWkwtKtFQz7.D1JYAV_o-" alt="Flared Halterneck Dress" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><p class="rp-name">Flared Halterneck Dress</p><p class="rp-note">H&amp;M · "Love the flow and freedom in this dress — the print and colors make it easy to match with a cute bag and shoes."</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://on.ltk.com/+xuUMsNZHb8caIOGXTz-_AQ?li=68120303-85c7-11f1-ba34-3e00cb9fcc1e" target="_blank" rel="noopener" class="shop-btn">Shop on LTK →</a></div></div>
+    </div>
+    <div class="product-card">
+      <img src="https://product-images-cdn.liketoknow.it/mQyMbqIDuSJHT8MD9p6wT167pRBObGNT.3sYt3xqczbMK7XjEflkt3MhGhrWcI0wUskg3yXC8yo3VHitNHnMZ9wiNKG.4cjvSoI7m_42vxRmKxwJvSqdBe_bL409Tqnl8cdWlgorDsNvuRomhMeL.CiqMlAODZWRO8wfvj6M_1ZZrO4UNNtPajIQBq4-" alt="Viscose Tunic Dress" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><p class="rp-name">Viscose Tunic Dress</p><p class="rp-note">H&amp;M · "Black &amp; white printed, giving effortless and flattering — way more expensive than it is. Wearing a size small."</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://on.ltk.com/+FL-kijd01U3E37TLPHk2kQ?li=fc3018c6-848e-11f1-adaa-d6684ab041c3" target="_blank" rel="noopener" class="shop-btn">Shop on LTK →</a></div></div>
+    </div>
+  </div>
+
+  <p class="section-kicker" style="margin-top:48px; margin-bottom:4px;">Real video + real shop link</p>
+  <p style="font-size:0.85rem; color:var(--color-text-secondary); margin-top:0; margin-bottom:20px;">Found — your Excel file had the real TikTok affiliate short-links attached as hyperlinks behind the product titles. CSV export was dropping them; the .xlsx has them all.</p>
+  <div class="product-grid">
+    <div class="product-card">
+      <img src="https://contactqueenreen-jpg.github.io/queen-reen-site/Deep%20V%20Halter%20Dress.jpg" alt="Deep V Halter Dress" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><p class="rp-name">Deep V Neck Dress</p><p class="rp-note">"Found such a cute summer dress — the open back + tie is so cute and secure." Apricot, size small.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvhJkLc1rx-MYISB/" target="_blank" rel="noopener" class="shop-btn">Shop on TikTok →</a></div></div>
+    </div>
+    <div class="product-card">
+      <img src="https://contactqueenreen-jpg.github.io/queen-reen-site/Black%20and%20White%20Dress.jpg" alt="Black & White Dress" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><p class="rp-name">Black &amp; White Dress</p><p class="rp-note">"Perfect for a casual, professional aesthetic. Not too fond of the material but it gets the job done."</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvhS5BsNYE-FGKlL/" target="_blank" rel="noopener" class="shop-btn">Shop on TikTok →</a></div></div>
+    </div>
+    <div class="product-card">
+      <img src="https://contactqueenreen-jpg.github.io/queen-reen-site/Corset%20Top.jpg" alt="Floral Corset" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><p class="rp-name">Floral Corset Top</p><p class="rp-note">"So pretty." Styled for brunch.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvhA4Ax3Kv-r0mdJ/" target="_blank" rel="noopener" class="shop-btn">Shop on TikTok →</a></div></div>
+    </div>
+    <div class="product-card">
+      <img src="https://p19-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/oQvJAAta2Bm91RoBAWEaETgnlpOBOlRiAIAAi~tplv-tiktokx-dmt-logom:tos-useast8-i-0068-tx2/oYBTAKBAIBQKnEizofImCEziE1HjcAQjAEAAi1.image?dr=9634&x-expires=1785369600&x-signature=y6B%2BSTrVKyVr1POkyN%2FGS8ETFNQ%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Olive Two Piece Set" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><p class="rp-name">Olive Two-Piece Set</p><p class="rp-note">Tank top and skirt set — cute two-piece.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvhyQp91CM-ElEur/" target="_blank" rel="noopener" class="shop-btn">Shop on TikTok →</a></div></div>
+    </div>
+    <div class="product-card">
+      <img src="https://contactqueenreen-jpg.github.io/queen-reen-site/Fashion%20Nova%20Baggy%20Jeans.jpg" alt="Fashion Nova Baggy Cargo Pants" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><p class="rp-name">Baggy Cargo Jeans</p><p class="rp-note">@Fashion Nova · "Comfortable, stylish, dressed up or down — thought being shorter they wouldn't flatter me, but I was so wrong."</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvhmfp8g8N-yBpPk/" target="_blank" rel="noopener" class="shop-btn">Shop on TikTok →</a></div></div>
+    </div>
+    <div class="product-card">
+      <img src="https://contactqueenreen-jpg.github.io/queen-reen-site/Aviator%20Sunglasses.jpg" alt="Aviator Sunglasses" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><p class="rp-name">Aviator Sunglasses</p><p class="rp-note">"Durable, lightweight, unisex, and so freaking cute."</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvhpT7CYsU-AsO56/" target="_blank" rel="noopener" class="shop-btn">Shop on TikTok →</a></div></div>
+    </div>
+    <div class="product-card">
+      <div class="ph" data-cap="photo"></div>
+      <div class="pc-body"><p class="rp-name">Kane Shoes</p><p class="rp-note placeholder-copy">No video for this one — just a TikTok Shop link.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvhgNGQQ6b-eEqTj/" target="_blank" rel="noopener" class="shop-btn">Shop on TikTok →</a></div></div>
+    </div>
+    <div class="product-card">
+      <div class="ph" data-cap="photo"></div>
+      <div class="pc-body"><p class="rp-name">FINETOO 15pc Cotton Panties</p><p class="rp-note placeholder-copy">No video, no name column filled in the sheet — link is real though.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvrc6rgN68-w3g5T/" target="_blank" rel="noopener" class="shop-btn">Shop on TikTok →</a></div></div>
+    </div>
+    <div class="product-card">
+      <div class="ph" data-cap="photo"></div>
+      <div class="pc-body"><p class="rp-name">Silicone Bra</p><p class="rp-note placeholder-copy">No video, no name column filled in the sheet — link is real though.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvr3QSyqrx-aMQDp/" target="_blank" rel="noopener" class="shop-btn">Shop on TikTok →</a></div></div>
+    </div>
+  </div>
+
+  <p class="placeholder-tag" style="margin-top:32px; display:inline-block;">Every Fashion row from your spreadsheet is now represented — 12 of 12. Photos are still real TikTok video thumbnails where a video exists (7), plain placeholders where there's only a product link and no video (Kane Shoes, the two underwear items). Prices weren't in the sheet, so all still show [Price].</p>
+  <div style="height:32px;"></div>
+</div>
+
+<!-- ============ SHOP / HAIR — real data + real content strip ============ -->
+<div class="proto-tag" style="background:var(--color-royal-purple);">SHOP — HAIR (real data + real content, no blank page)</div>
+<div class="wrap" style="padding-top:48px;">
+  <p class="section-kicker">Shop</p>
+  <h1 class="section-title" style="font-size:2rem; margin-bottom:16px;">Hair</h1>
+  <div class="cat-page-intro"><p>Curly and textured hair care — what actually stays in rotation, plus the real moments behind it. This category matters to me, so it gets real space even while the shop side is still small.</p></div>
+
+  <p class="section-kicker" style="margin-top:40px; margin-bottom:14px;">Shop</p>
+  <div class="product-grid" style="grid-template-columns:repeat(2,1fr); max-width:600px;">
+    <div class="product-card">
+      <img src="https://contactqueenreen-jpg.github.io/queen-reen-site/Miche%20Holding%20Gel.jpg" alt="Miche anti-frizz gel" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><span class="ribbon">Reen's Pick</span><p class="rp-name">Miche Anti-Humidity Holding Gel</p><p class="rp-note">Day 4, still no frizz. Alcohol-free, all curl types.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvhxwdUABF-7q7oq/" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+    <div class="product-card">
+      <img src="https://p16-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/okrpqdKEX0EeXcsqA5AIRdvF3fpuHdEVEDLBAm~tplv-tiktokx-dmt-logom:tos-useast8-i-0068-tx2/oce9IA6Qjqe8P2Ci7AAuwQAuIAvUeJMsQNYIWE.image?dr=9634&x-expires=1785380400&x-signature=C%2BeyTcrOszRp5OKznWySUnjV0Uo%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Ionic blow dryer kit" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><p class="rp-name">Ionic Hairdryer Kit with Diffuser</p><p class="rp-note">"For thick curly hair, your blow dryer needs to be powerful." Gets hot, gets it done.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvroVBSdch-JqLO2/" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+  </div>
+
+  <p class="section-kicker" id="hair-diaries" style="margin-top:56px; margin-bottom:2px; scroll-margin-top:80px;">Hair Diaries</p>
+  <h3 class="section-title" style="font-size:1.15rem; margin-bottom:16px;">Real moments, not just products</h3>
+  <div class="also-grid">
+    <a href="https://www.tiktok.com/@queen_reen/video/7665965648081669406" target="_blank" rel="noopener" style="text-decoration:none; color:inherit;">
+      <div class="content-cover" data-cat="hair" style="border-radius: var(--radius-medium); margin-bottom:10px;">
+        <img src="https://contactqueenreen-jpg.github.io/queen-reen-site/Wig.jpg" alt="Trying a wig for the first time" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+        <div class="cover-wash"></div>
+        <span class="play-badge">▶</span>
+        <div class="cover-masthead"><span class="cover-wordmark">QUEEN REEN</span><span class="cover-category">Hair / Results</span></div>
+        <div class="cover-scrim"><p class="cover-kicker">Hair / Results</p><h3 class="cover-title" style="font-size:0.9rem;">My First Wig — 12" Pixie</h3></div>
+      </div>
+      <p class="simple-name" style="padding:0 4px;">"Wasn't half bad" — first time trying a wig</p>
+    </a>
+    <a href="https://www.tiktok.com/@queen_reen/video/7662165748915129630" target="_blank" rel="noopener" style="text-decoration:none; color:inherit;">
+      <div class="content-cover" data-cat="hair" style="border-radius: var(--radius-medium); margin-bottom:10px;">
+        <img src="https://contactqueenreen-jpg.github.io/queen-reen-site/Haircut%20at%20Different%20By%20Design.jpg" alt="Different By Design hair trim" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+        <div class="cover-wash"></div>
+        <span class="play-badge">▶</span>
+        <div class="cover-masthead"><span class="cover-wordmark">QUEEN REEN</span><span class="cover-category">Hair / Results</span></div>
+        <div class="cover-scrim"><p class="cover-kicker">Hair / Results</p><h3 class="cover-title" style="font-size:0.9rem;">Different By Design, Reno</h3></div>
+      </div>
+      <p class="simple-name" style="padding:0 4px;">Found a natural hair salon that takes Sunday walk-ins</p>
+    </a>
+  </div>
+  <div style="height:32px;"></div>
+</div>
+
+<!-- ============ SHOP / HOME & LIFESTYLE — real data ============ -->
+<div class="proto-tag" style="background:var(--color-royal-purple);">SHOP — HOME &amp; LIFESTYLE (real data, includes wellness item until that category has more)</div>
+<div class="wrap" style="padding-top:48px;">
+  <p class="section-kicker">Shop</p>
+  <h1 class="section-title" style="font-size:2rem; margin-bottom:16px;">Home &amp; Lifestyle</h1>
+  <div class="cat-page-intro"><p>Everyday finds for the house and beyond — including a wellness pick that doesn't have enough company yet for its own category. That'll change as more comes in.</p></div>
+
+  <div class="product-grid" style="margin-top:32px;">
+    <div class="product-card">
+      <img src="https://p19-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/oMyDFBiMlEgiziYUQIJFEfUkVrSVqQAseEaRAI~tplv-tiktokx-dmt-logom:tos-useast8-i-0068-tx2/owVKUFsiA2IrAIkEPBi1AVBBACKgAi8ifSJCQy.image?dr=9634&x-expires=1785380400&x-signature=1OBgZeOS8o1zEDSuV1ndR%2F9y0SU%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="64oz glass water bottle" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><span class="ribbon">Reen's Pick</span><p class="rp-name">64oz Borosilicate Glass Water Bottle</p><p class="rp-note">"Less work in my brain" — big enough to skip the refills.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvhXp3k7T3-BHZlg/" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+    <div class="product-card">
+      <img src="https://p16-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/oQUmKC0nQ5JKCjKIIrcYfIAdEjLRVqef8AKGqI~tplv-tiktokx-origin.image?dr=9636&x-expires=1785380400&x-signature=WbXz67gtLnX%2F2awo9lKmSwtmyr0%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="360 rotating earring holder" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block;">
+      <div class="pc-body"><p class="rp-name">360° Rotating Earring Holder</p><p class="rp-note">"Another reason to buy more earrings" — chaos, organized.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvhvBFfeC1-Ktixr/" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+    <div class="product-card">
+      <div class="ph" data-cap="photo"></div>
+      <div class="pc-body"><p class="rp-name">FlyCleanse Multi-Purpose Degreaser</p><p class="rp-note placeholder-copy">Real link, no video yet.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvrKXAqgH5-F1yq5/" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+    <div class="product-card">
+      <div class="ph" data-cap="photo"></div>
+      <div class="pc-body"><span class="placeholder-tag">Wellness</span><p class="rp-name">Ryze Superfoods Mushroom Coffee</p><p class="rp-note placeholder-copy">Real link, no video yet.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvrsPw3tAF-XoVBE/" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+    <div class="product-card">
+      <div class="ph" data-cap="photo"></div>
+      <div class="pc-body"><span class="placeholder-tag">Family</span><p class="rp-name">Nex Playground</p><p class="rp-note placeholder-copy">Active play system for kids &amp; families — real link, no video yet.</p><div class="price-row"><span class="price placeholder-copy">[Price]</span><a href="https://www.tiktok.com/t/ZP9rvhofrDQGE-DGGIx/" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+  </div>
+  <div style="height:32px;"></div>
+</div>
+
+<!-- ============ MY WORLD / WHERE I'VE BEEN — real place content, no products ============ -->
+<div class="proto-tag" style="background:var(--color-royal-purple);" id="where-ive-been">MY WORLD — WHERE I'VE BEEN (real, not shoppable — Food + Places)</div>
+<div class="wrap" style="padding-top:48px; padding-bottom:64px;">
+  <p class="section-kicker">My World</p>
+  <h1 class="section-title" style="font-size:2rem; margin-bottom:16px;">Where I've Been</h1>
+  <div class="cat-page-intro"><p>Coffee, food, and places worth the trip — Reno and Charlotte so far. Nothing to shop here, just real places I'd send a friend to.</p></div>
+
+  <div class="content-card-grid" style="grid-template-columns:repeat(3,1fr); margin-top:32px;">
+    <a href="https://www.tiktok.com/@queen_reen/video/7665341690160418078" target="_blank" rel="noopener" class="content-card">
+      <div class="content-cover" data-cat="home"><img src="https://p19-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/o4o6BA1jXqEffIQUDwLeICA4uhcPtMQIjdG7I1~tplv-tiktokx-dmt-logom:tos-useast8-i-0068-tx2/o800QQWWAeUjG9fDQAMAgeg5GDpADJGRAwQU8e.image?dr=9634&x-expires=1784941200&x-signature=OEG%2F%2BN0ke%2FgCxAULgUN9OSj8XSA%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Coffee Bar" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"><span class="play-badge">▶</span><div class="cover-masthead"><span class="cover-wordmark">QUEEN REEN</span><span class="cover-category">Food + Places</span></div><div class="cover-scrim"><p class="cover-kicker">Reno, NV</p><h3 class="cover-title">Coffee Bar</h3></div></div>
+      <div class="cc-body"><h4>Coffee Bar</h4><p class="cc-tags">Reno, NV</p></div>
+    </a>
+    <a href="https://www.tiktok.com/@queen_reen/video/7664852480320146718" target="_blank" rel="noopener" class="content-card">
+      <div class="content-cover" data-cat="home"><img src="https://p19-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/oQeVePtSgUt2QAIKBDSLmIuGCEYMvgjfXHqAEI~tplv-tiktokx-dmt-logom:tos-useast8-i-0068-tx2/oEERyEQfnCCWAuDECAf4FaAVAbIWtALSEwXqBE.image?dr=9634&x-expires=1784941200&x-signature=oPloW7ADIYvcaChdFeTrzSZA4ls%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Chrome Coffee Works" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"><span class="play-badge">▶</span><div class="cover-masthead"><span class="cover-wordmark">QUEEN REEN</span><span class="cover-category">Food + Places</span></div><div class="cover-scrim"><p class="cover-kicker">Reno, NV</p><h3 class="cover-title">Chrome Coffee Works</h3></div></div>
+      <div class="cc-body"><h4>Chrome Coffee Works</h4><p class="cc-tags">Reno, NV</p></div>
+    </a>
+    <a href="https://www.tiktok.com/@queen_reen/video/7664008849279552799" target="_blank" rel="noopener" class="content-card">
+      <div class="content-cover" data-cat="home"><img src="https://p16-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/oMfFLwsfVcFpFQA0If4hGBfDAE3RUoBYBCb5IK~tplv-tiktokx-dmt-logom:tos-useast8-i-0068-tx2/oExxduAlEEaHGrAEABqEcD3CXIxeVkAfAADFBR.image?dr=9634&x-expires=1785380400&x-signature=VRvSBxGtcoRQ84XVAkPdeuzF2rI%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Mochinut" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"><span class="play-badge">▶</span><div class="cover-masthead"><span class="cover-wordmark">QUEEN REEN</span><span class="cover-category">Food + Places</span></div><div class="cover-scrim"><p class="cover-kicker">Reno, NV</p><h3 class="cover-title">Mochinut</h3></div></div>
+      <div class="cc-body"><h4>Mochinut</h4><p class="cc-tags">Reno, NV — "nothing hits better than warm fresh glazed mochi donuts"</p></div>
+    </a>
+    <a href="https://www.tiktok.com/@queen_reen/video/7663607399248350494" target="_blank" rel="noopener" class="content-card">
+      <div class="content-cover" data-cat="home"><img src="https://p19-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/o0CSRADmWBpfpA3naeBvVJiEAbxFEEqSEIAAmx~tplv-tiktokx-dmt-logom:tos-useast8-i-0068-tx2/oQUCZLABBiUkABKAV17wINAA0iEHfiJBIammHA.image?dr=9634&x-expires=1785380400&x-signature=5C7I25lcCWbYnJMxOiYDq4711rc%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Beloved's Bakery & Cafe" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"><span class="play-badge">▶</span><div class="cover-masthead"><span class="cover-wordmark">QUEEN REEN</span><span class="cover-category">Food + Places</span></div><div class="cover-scrim"><p class="cover-kicker">Reno, NV</p><h3 class="cover-title">Beloved's Bakery &amp; Cafe</h3></div></div>
+      <div class="cc-body"><h4>Beloved's Bakery &amp; Cafe</h4><p class="cc-tags">Reno, NV — "a community favorite"</p></div>
+    </a>
+    <a href="https://www.tiktok.com/@queen_reen/video/7662597127884868894" target="_blank" rel="noopener" class="content-card">
+      <div class="content-cover" data-cat="home"><img src="https://p16-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/okEXIBEaRADVAFDq9FZLfwnbLOzEME2AVfw5Bj~tplv-tiktokx-dmt-logom:tos-useast8-i-0068-tx2/o4zQOhAGIEdbHeAEwBqEuDyCVQIWVAAfAAlFCR.image?dr=9634&x-expires=1785380400&x-signature=Uh0k8m4czj7vgcfSjF2CIRgL6I8%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="Off The Hook" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"><span class="play-badge">▶</span><div class="cover-masthead"><span class="cover-wordmark">QUEEN REEN</span><span class="cover-category">Food + Places</span></div><div class="cover-scrim"><p class="cover-kicker">Charlotte, NC</p><h3 class="cover-title">Off The Hook</h3></div></div>
+      <div class="cc-body"><h4>Off The Hook</h4><p class="cc-tags">Charlotte, NC — Monarch Market</p></div>
+    </a>
+    <a href="https://www.tiktok.com/@queen_reen/video/7661063586155990303" target="_blank" rel="noopener" class="content-card">
+      <div class="content-cover" data-cat="home"><img src="https://p16-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/o0A1iEYHqEPmkvmzADBN1dMUFB6EVIfRMEteRw~tplv-tiktokx-dmt-logom:tos-useast8-i-0068-tx2/o0LMRAivZVAjrEIqBUFfECAlCk3ADyEeRADmEI.image?dr=9634&x-expires=1785380400&x-signature=vx58g%2BGH5wxhI0f0Lep7qWx2NUw%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5" alt="The Peach Cobbler Factory" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"><span class="play-badge">▶</span><div class="cover-masthead"><span class="cover-wordmark">QUEEN REEN</span><span class="cover-category">Food + Places</span></div><div class="cover-scrim"><p class="cover-kicker">Charlotte, NC</p><h3 class="cover-title">The Peach Cobbler Factory</h3></div></div>
+      <div class="cc-body"><h4>The Peach Cobbler Factory</h4><p class="cc-tags">Charlotte, NC — Northlake</p></div>
+    </a>
+  </div>
+</div>
+
+<!-- ============ REVIEW DETAIL TEMPLATE ============ -->
+<div class="proto-tag" style="background:var(--color-royal-purple);">REVIEW DETAIL TEMPLATE — placeholder copy clearly labeled</div>
+<div class="wrap detail-flex">
+  <div class="prose">
+    <span class="placeholder-tag">Placeholder — not Reen's real review yet</span>
+    <p class="moment-cap">As seen in "[content moment title]"</p>
+    <h1 class="section-title" style="font-size:1.7rem; margin-bottom:18px;">[Review headline goes here]</h1>
+    <p class="placeholder-copy">[Placeholder paragraph — replace with Reen's real first-hand experience: how long she's used it, what changed, how it compares to what she tried before. Written in her voice, not invented on her behalf.]</p>
+    <p class="pull-quote placeholder-copy">"[Placeholder pull-quote — a real line from her review, once written]"</p>
+    <p class="placeholder-copy">[Placeholder paragraph — any caveats, who it's not for, honest tradeoffs.]</p>
+  </div>
+  <div>
+    <p class="shelf-title">Mentioned in This Story</p>
+    <div class="inline-pick">
+      <div class="ph"></div>
+      <div><p class="rp-name">[Product name]</p><p class="rp-note placeholder-copy">[Placeholder note]</p><a href="#" class="shop-btn" style="display:inline-block; margin-top:6px;">Shop This Find →</a></div>
+    </div>
+    <div class="inline-pick">
+      <div class="ph"></div>
+      <div><p class="rp-name">[Product name]</p><p class="rp-note placeholder-copy">[Placeholder note]</p><a href="#" class="shop-btn" style="display:inline-block; margin-top:6px;">Shop This Find →</a></div>
+    </div>
+  </div>
+</div>
+<div class="wrap" style="padding-bottom:64px;">
+  <p class="shelf-title">Also Part of This Moment</p>
+  <div class="also-grid">
+    <div class="simple-item"><div class="ph"></div><div><p class="rp-name">[Product]</p><p class="rp-note placeholder-copy">[Placeholder]</p></div></div>
+    <div class="simple-item"><div class="ph"></div><div><p class="rp-name">[Product]</p><p class="rp-note placeholder-copy">[Placeholder]</p></div></div>
+    <div class="simple-item"><div class="ph"></div><div><p class="rp-name">[Product]</p><p class="rp-note placeholder-copy">[Placeholder]</p></div></div>
+  </div>
+</div>
+
+<!-- ============ SHOP MY CONTENT — DETAIL PAGE ============ -->
+<div class="proto-tag" style="background:var(--color-royal-purple);" id="real-prequel-example">SHOP MY CONTENT — REAL EXAMPLE (Prequel Lip Visor) · rest of site still placeholder</div>
+<div class="wrap detail-flex">
+  <div>
+    <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@queen_reen/video/7655365676869225758" data-video-id="7655365676869225758" data-embed-from="oembed" style="max-width:320px; min-width:280px;">
+      <section>
+        <a target="_blank" title="@queen_reen" href="https://www.tiktok.com/@queen_reen?refer=embed">@queen_reen</a>
+        <p>I'm not a lip gloss girl… but I am a hydrated lips girl. 🤎✨ I've been using the Prequel SPF 30 Lip Visor because it keeps my lips feeling hydrated while giving them daily sun protection. It's clear, and easy to put on before I go outside. <a title="lipspf" target="_blank" href="https://www.tiktok.com/tag/lipspf?refer=embed">#lipspf</a> <a title="prequel" target="_blank" href="https://www.tiktok.com/tag/prequel?refer=embed">#prequel</a></p>
+      </section>
+    </blockquote>
+    <script async src="https://www.tiktok.com/embed.js"></script>
+  </div>
+  <div>
+    <p class="section-kicker">Shop My Content — Real Example</p>
+    <h1 class="section-title" style="font-size:1.6rem; margin-bottom:10px;">"I'm not a lip gloss girl… but I am a hydrated lips girl"</h1>
+    <p style="font-size:0.95rem; line-height:1.6; color:var(--color-text-secondary); margin-bottom:20px;">Real caption, your words: it's clear, easy to put on before heading outside, and keeps lips hydrated with SPF 30 protection built in.</p>
+    <p class="shelf-title">Product in This Video</p>
+    <div class="inline-pick">
+      <img src="https://p16-oec-general-useast5.ttcdn-us.com/tos-useast5-i-omjb5zjo8w-tx/101731da293b49f3be1ad759b52a2d3c~tplv-fhlh96nyum-resize-webp:260:260.webp" alt="Prequel SPF 30 Lip Visor" style="width:80px; height:80px; object-fit:cover; border-radius:var(--radius-small); flex-shrink:0;">
+      <div>
+        <p class="rp-name">Prequel SPF 30 Lip Visor</p>
+        <p class="rp-note placeholder-copy" style="font-style:normal;">[Price — add when you send it]</p>
+        <a href="https://www.tiktok.com/view/product/1731077691221053918?_d=emlj08e9hka4cd&_svg=3&chain_key=%7B%22t%22%3A1%2C%22k%22%3A%22000000000000000007665531619113191181%22%2C%22sc%22%3A%22more%22%7D&sec_user_id=MS4wLjABAAAA2okkkbuVKfGNoeTl70_Qi2HVLwjaY6b-FrYPdAb2jznHnwwuJ9b-WZfAeUoyRcit&unique_id=queen_reen" target="_blank" rel="noopener" class="shop-btn" style="display:inline-block; margin-top:6px;">Shop on TikTok →</a>
+      </div>
+    </div>
+    <p class="placeholder-tag" style="margin-top:16px;">Real: video embed, product name/image, review copy (your own caption). Placeholder: price (share it and I'll add it), and whether this TikTok Shop link is your stable creator link vs. a one-time share link — worth double-checking since share-instance URLs can expire.</p>
+  </div>
+</div>
+<div class="wrap" style="padding-bottom:64px;">
+  <p class="shelf-title">Also From Reen — still placeholder, awaiting links</p>
+  <div class="also-grid">
+    <div class="simple-item"><div class="ph" data-cap="photo"></div><div><p class="rp-name placeholder-copy">Miche Tropical Oasis Anti-Humidity Gel</p><p class="rp-note placeholder-copy">[Real product — saw the photo, need price + link]</p></div></div>
+    <div class="simple-item"><div class="ph" data-cap="photo"></div><div><p class="rp-name placeholder-copy">[Salon visit / hair content]</p><p class="rp-note placeholder-copy">[Need link + product info]</p></div></div>
+    <div class="simple-item"><div class="ph" data-cap="photo"></div><div><p class="rp-name placeholder-copy">[Outfit try-on content]</p><p class="rp-note placeholder-copy">[Need product/brand links]</p></div></div>
+  </div>
+</div>
+
+<!-- ============ WORK WITH ME — no fake metrics ============ -->
+<div class="proto-tag" style="background:var(--color-royal-purple);">WORK WITH ME — no fabricated metrics/collabs</div>
+<div class="wrap" style="padding-top:56px;">
+  <div class="wwm-hero-band">
+    <p class="section-kicker">Let's Work Together</p>
+    <h1 class="section-title" style="font-size:2rem; margin-bottom:16px;">Two ways to work with me, depending on what you need</h1>
+    <p class="prose">I'm new to brand partnerships, and intentionally selective about who I work with — it has to be a brand I'd trust and use myself, not just an opportunity that happens to land in my inbox. Whether you need standalone content for your own ads or a longer-term partnership with reach behind it, here's where to start.</p>
+  </div>
+
+  <div class="track-grid">
+    <div class="track-card">
+      <span class="track-num">01</span>
+      <h2 class="track-title">UGC Content Creation</h2>
+      <p class="track-desc">Standalone, brand-style video content you own and run as ads — unboxings, demos, GRWMs, and content made to stop the scroll, not just look nice. Available independent of audience size.</p>
+      <div class="portfolio-mini-grid">
+        <div class="ph" data-cap="clip"></div>
+        <div class="ph" data-cap="clip"></div>
+        <div class="ph" data-cap="clip"></div>
+      </div>
+      <div class="collab-row">
+        <span class="collab-chip">Unboxings</span>
+        <span class="collab-chip">Product Demos</span>
+        <span class="collab-chip">GRWM</span>
+        <span class="collab-chip">Testimonial-style</span>
+      </div>
+      <a href="#" class="track-cta">View UGC Portfolio →</a>
+    </div>
+
+    <div class="track-card alt">
+      <span class="track-num">02</span>
+      <h2 class="track-title">Brand Partnerships &amp; Affiliate</h2>
+      <p class="track-desc">Sponsored features and affiliate partnerships across my own channels and this site — I'm selective, and it has to be a genuine fit on both sides, not just an opportunity that lands in my inbox.</p>
+      <div class="stat-row">
+        <div class="stat-placeholder"><p>Followers<br><strong style="color:rgba(255,255,255,0.85);">[Add when verified]</strong></p></div>
+        <div class="stat-placeholder"><p>Engagement<br><strong style="color:rgba(255,255,255,0.85);">[Add when verified]</strong></p></div>
+        <div class="stat-placeholder"><p>Audience<br><strong style="color:rgba(255,255,255,0.85);">[Add when verified]</strong></p></div>
+      </div>
+      <p class="track-desc" style="margin-bottom:10px; font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.6);">What I Look For in a Brand</p>
+      <div class="collab-row">
+        <span class="collab-chip">Genuine Fit</span>
+        <span class="collab-chip">Products I'd Actually Use</span>
+        <span class="collab-chip">Quality I Can Stand Behind</span>
+      </div>
+      <a href="#" class="track-cta">Request Media Kit →</a>
+    </div>
+  </div>
+
+  <p class="wwm-note">Full media kit, audience breakdown, and rates shared directly with brands upon inquiry.</p>
+  <div style="height:80px;"></div>
+</div>
+
+<script>
+// Hotspot dots: work on hover (desktop, via CSS) AND tap (mobile, no hover — via this JS)
+document.querySelectorAll('.dot').forEach(function (dot) {
+  dot.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var wasActive = dot.classList.contains('dot--active');
+    document.querySelectorAll('.dot--active').forEach(function (d) { d.classList.remove('dot--active'); });
+    if (!wasActive) dot.classList.add('dot--active');
+  });
+});
+document.addEventListener('click', function () {
+  document.querySelectorAll('.dot--active').forEach(function (d) { d.classList.remove('dot--active'); });
+});
+
+// Broken/expired hotlinked images (e.g. signed TikTok CDN thumbnails) fail gracefully
+// to a soft placeholder background instead of showing a broken-image icon.
+document.addEventListener('error', function (e) {
+  if (e.target.tagName === 'IMG') {
+    e.target.style.display = 'none';
+    var parent = e.target.closest('.content-cover, .product-card, .tag-photo, .world-tile');
+    if (parent) parent.classList.add('img-fallback');
+  }
+}, true);
+
+// Shop/Beauty filter chips: real filtering, not just visual
+var chipRow = document.getElementById('filterChips');
+if (chipRow) {
+  chipRow.addEventListener('click', function (e) {
+    var chip = e.target.closest('.chip');
+    if (!chip) return;
+    chipRow.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
+    chip.classList.add('active');
+    var filter = chip.getAttribute('data-filter');
+    document.querySelectorAll('#productGrid .product-card').forEach(function (card) {
+      var show = filter === 'all' || card.getAttribute('data-cat') === filter;
+      card.classList.toggle('is-hidden', !show);
+    });
+  });
+}
+</script>
+
+</body>
+</html>
