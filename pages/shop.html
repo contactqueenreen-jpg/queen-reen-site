@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop Beauty — Queen Reen</title>
+<meta name="description" content="Beauty and skincare, tested and tried before it ever made it here.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&family=Inter:ital@1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="wrap nav-row">
+    <a href="index.html" class="logo-lockup" aria-label="Queen Reen home">
+      <svg class="qr-mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true" focusable="false">
+        <defs><linearGradient id="qrGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#F3E6DC"/><stop offset="45%" stop-color="#D9C2E8"/><stop offset="100%" stop-color="#8B5FB8"/>
+        </linearGradient></defs>
+        <circle cx="50" cy="50" r="50" fill="url(#qrGrad)"/>
+        <text x="50" y="63" text-anchor="middle" font-family="Sora, sans-serif" font-weight="700" font-size="38" letter-spacing="-1" fill="#22222A">QR</text>
+      </svg>
+      <span class="wordmark">Queen Reen</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="discover.html">Discover</a></li>
+      <li><a href="shop-all.html">Shop</a></li>
+      <li><a href="travel.html">Travel</a></li>
+    </ul>
+    <a href="work-with-me.html" class="nav-cta">Work With Me</a>
+  </div>
+</header>
+
+<!-- ============ SHOP ============ -->
+<div class="wrap" style="padding-top:40px;">
+  <div class="shop-intro">
+    <h1 class="section-title" style="font-size:1.9rem; margin-bottom:14px;">Beauty</h1>
+    <p>Tested and tried before it ever made it here.</p>
+  </div>
+
+  <div class="routine-band">
+    <img src="https://contactqueenreen-jpg.github.io/queen-reen-site/Up%20%26%20Up%20Products.png" alt="Skincare routine shelf" onerror="this.parentElement.classList.add('img-fallback'); this.remove();">
+    <div>
+      <p class="eyebrow" style="text-align:left; margin-bottom:6px;">On My LTK</p>
+      <h2 class="section-title" style="font-size:1.15rem; margin:0 0 8px;">Target Dupes for La Roche-Posay &amp; Differin</h2>
+      <p class="routine-caption">"Started using these recently to see how they compare and so far I'm loving the results."</p>
+      <div class="routine-item"><p><span class="rn-name">up&amp;up Hydrating Gentle Face Wash</span><br><span class="rn-note">With ceramide · Target</span></p><a href="https://on.ltk.com/+sI_zfMUDczJv72ekKNEofQ?li=f7699e55-87ea-11f1-bd0f-a2a03ec1c19a" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div>
+      <div class="routine-item"><p><span class="rn-name">up&amp;up Deep Repair Face Moisturizer</span><br><span class="rn-note">Ceramide + niacinamide · Target</span></p><a href="https://on.ltk.com/+ZDAZJc0od_67zpPDzFjrjQ?li=f7699e55-87ea-11f1-bd0f-a2a03ec1c19a" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div>
+      <div class="routine-item"><p><span class="rn-name">Differin Gel</span><br><span class="rn-note">0.1% Adapalene · Walmart</span></p><a href="https://on.ltk.com/+x3pGusgCu-Q9EQM0kfcf-Q?li=f7699e55-87ea-11f1-bd0f-a2a03ec1c19a" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div>
+    </div>
+  </div>
+
+  <div class="chip-row" data-grid="productGridBeauty">
+    <button type="button" class="chip active" data-filter="all">All</button>
+    <button type="button" class="chip" data-filter="skincare">Skincare</button>
+    <button type="button" class="chip" data-filter="makeup">Makeup</button>
+  </div>
+  <div class="product-grid" id="productGridBeauty">
+    <div class="product-card" data-cat="skincare">
+      <div class="thumb"><img src="https://contactqueenreen-jpg.github.io/queen-reen-site/Prequel%20Lip%20Visor%20Sunscreen.jpg" alt="" onerror="this.parentElement.classList.add('img-fallback'); this.remove();"></div>
+      <div class="pc-body"><p class="pc-name">Prequel SPF 30 Lip Visor</p><p class="pc-note">Clear, easy to apply, hydrates with SPF built in.</p><div class="pc-row"><a href="review-prequel-lip-visor.html" class="shop-btn">Read Review →</a></div></div>
+    </div>
+    <div class="product-card" data-cat="skincare">
+      <div class="thumb"><img src="https://contactqueenreen-jpg.github.io/queen-reen-site/R%26R%20Sun%20Serum.jpg" alt="" onerror="this.parentElement.classList.add('img-fallback'); this.remove();"></div>
+      <div class="pc-body"><p class="pc-name">Undefined Beauty R&amp;R Sun Serum</p><p class="pc-note">Tinted mineral SPF 50, blended smooth with no scary cast.</p><div class="pc-row"><a href="https://on.ltk.com/+Asgi5JqAgCei-30nfHz_PA?li=0bbf8cf2-88c8-11f1-bcfa-728e873064bd" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+    <div class="product-card" data-cat="makeup">
+      <div class="thumb"><img src="https://contactqueenreen-jpg.github.io/queen-reen-site/Wonderskin%20Kip%20Stain%20%26%20Lip%20Liner.jpg" alt="" onerror="this.parentElement.classList.add('img-fallback'); this.remove();"></div>
+      <div class="pc-body"><p class="pc-name">Wonderskin Perfect Lip Duo</p><p class="pc-note">Lip stain and glitter gloss, cute and long-lasting.</p><div class="pc-row"><a href="https://www.tiktok.com/t/ZP9rvhdoTwmTN-S6BGr/" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+    <div class="product-card" data-cat="makeup">
+      <div class="thumb"><img src="https://contactqueenreen-jpg.github.io/queen-reen-site/Wonderskin%20Lipstain.jpg" alt="" onerror="this.parentElement.classList.add('img-fallback'); this.remove();"></div>
+      <div class="pc-body"><p class="pc-name">Wonderskin Wonder Blading Lip Masque</p><p class="pc-note">Vegan, long-lasting liquid blading color.</p><div class="pc-row"><a href="https://www.tiktok.com/t/ZP9rvhHXSkDsK-oFkCu/" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+    <div class="product-card" data-cat="makeup">
+      <div class="thumb"><img src="https://contactqueenreen-jpg.github.io/queen-reen-site/Maybeline%20Mascara.jpg" alt="" onerror="this.parentElement.classList.add('img-fallback'); this.remove();"></div>
+      <div class="pc-body"><p class="pc-name">Maybelline Sky Tubes Mascara</p><p class="pc-note">Tubing formula with 24hr length and smudge-proof wear.</p><div class="pc-row"><a href="https://www.tiktok.com/t/ZP9rvhLN8pcc6-9JwS4/" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+    <div class="product-card" data-cat="makeup">
+      <div class="thumb"><img src="https://contactqueenreen-jpg.github.io/queen-reen-site/The%20Lip%20Bar%20Lip%20Stain.jpg" alt="" onerror="this.parentElement.classList.add('img-fallback'); this.remove();"></div>
+      <div class="pc-body"><p class="pc-name">The Lip Bar Liquid Matte Lipstick</p><p class="pc-note">A faithful since the beginning, vegan and long-lasting.</p><div class="pc-row"><a href="https://www.tiktok.com/view/product/1732402030042059445?_d=emlj08e9hka4cd" target="_blank" rel="noopener" class="shop-btn">Shop →</a></div></div>
+    </div>
+  </div>
+  <div style="height:24px;"></div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <a href="index.html" class="wordmark" style="font-size:1rem;">Queen Reen</a>
+    <div>
+      <a href="https://www.tiktok.com/@queen_reen" target="_blank" rel="noopener">TikTok</a><a href="https://www.instagram.com/mxbreen/" target="_blank" rel="noopener">Instagram</a><a href="https://www.youtube.com/@queen_reen/featured" target="_blank" rel="noopener">YouTube</a><a href="work-with-me.html#contact-form">Contact</a>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">© 2026 Queen Reen. Some links are affiliate links. <a href="affiliate-disclosure.html" style="color:inherit;">Affiliate Disclosure</a> · Privacy Policy</div>
+</footer>
+
+<script src="shared.js"></script>
+</body>
+</html>
