@@ -1,4 +1,19 @@
 document.addEventListener('DOMContentLoaded', function () {
+var navToggle = document.querySelector('.nav-toggle');
+var navLinks = document.getElementById('navLinks');
+if (navToggle && navLinks) {
+  navToggle.addEventListener('click', function () {
+    var isOpen = navLinks.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  navLinks.addEventListener('click', function (e) {
+    if (e.target.tagName === 'A') {
+      navLinks.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
 document.addEventListener('error', function (e) {
   if (e.target.tagName === 'IMG') {
     var parent = e.target.closest('.thumb, .hero-ph');
