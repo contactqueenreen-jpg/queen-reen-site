@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="shared.css">
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <header class="site-nav">
   <div class="wrap nav-row">
@@ -35,6 +36,8 @@
     </button>
   </div>
 </header>
+
+<main id="main-content">
 
 <!-- ============ WORK WITH ME ============ -->
 <div class="wrap" style="padding-top:44px;">
@@ -71,7 +74,9 @@
     <div class="contact-form-card">
       <h2>Let's Talk</h2>
       <p>Tell me a bit about what you have in mind, whether that's UGC, a partnership, or something else.</p>
-      <form>
+      <p id="form-success" class="form-note" style="display:none;">Thanks — your message is in. I'll get back to you soon.</p>
+      <p id="form-error" class="form-note" style="display:none;">Something went wrong sending that. Please try again, or email me directly at <a href="mailto:contactqueenreen@gmail.com">contactqueenreen@gmail.com</a>.</p>
+      <form id="contactForm" action="/api/contact" method="post">
         <div class="form-row">
           <label for="cf-name">Name</label>
           <input type="text" id="cf-name" name="name" required>
@@ -97,12 +102,15 @@
           <textarea id="cf-message" name="message" required></textarea>
         </div>
         <button type="submit" class="form-submit">Send Message</button>
+        <p class="form-note">By submitting this form, you agree that Queen Reen may use the information you provide to respond to your inquiry. See the <a href="legal-privacy-policy.html">Privacy Policy</a>.</p>
       </form>
       <p class="form-note">You can also reach me directly at <a href="mailto:contactqueenreen@gmail.com">contactqueenreen@gmail.com</a></p>
     </div>
   </div>
   <div style="height:48px;"></div>
 </div>
+
+</main>
 
 <footer class="site-footer">
   <div class="wrap footer-row">
@@ -111,9 +119,24 @@
       <a href="https://www.tiktok.com/@queen_reen" target="_blank" rel="noopener">TikTok</a><a href="https://www.instagram.com/mxbreen/" target="_blank" rel="noopener">Instagram</a><a href="https://www.youtube.com/@queen_reen/featured" target="_blank" rel="noopener">YouTube</a><a href="work-with-me.html#contact-form">Contact</a>
     </div>
   </div>
-  <div class="wrap footer-bottom">© 2026 Queen Reen. Some links are affiliate links. <a href="affiliate-disclosure.html" style="color:inherit;">Affiliate Disclosure</a> · Privacy Policy</div>
+  <div class="wrap footer-bottom">
+    <p style="margin:0;">© 2026 Queen Reen. Some links are affiliate links. Unauthorized use of Queen Reen content, branding, name, image, likeness, or voice is prohibited.</p>
+    <p class="footer-legal-links"><a href="legal-privacy-policy.html">Privacy</a><a href="legal-terms-of-use.html">Terms</a><a href="affiliate-disclosure.html">Affiliate Disclosure</a><a href="legal-copyright.html">Copyright</a><a href="legal-cookie-policy.html">Cookies</a><a href="legal-accessibility.html">Accessibility</a></p>
+  </div>
 </footer>
 
 <script src="shared.js"></script>
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var form = document.getElementById('contactForm');
+  if (params.get('sent') === '1') {
+    document.getElementById('form-success').style.display = 'block';
+    if (form) form.style.display = 'none';
+  } else if (params.get('error') === '1') {
+    document.getElementById('form-error').style.display = 'block';
+  }
+})();
+</script>
 </body>
 </html>
