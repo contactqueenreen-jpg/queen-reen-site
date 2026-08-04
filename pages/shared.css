@@ -155,7 +155,8 @@ footer.site-footer { padding: 40px 0 24px; border-top: 1px solid rgba(34,34,42,0
 
 /* LTK routine module */
 .routine-band { background: #fff; border-radius: var(--radius-large); padding: 28px; box-shadow: var(--shadow-soft); margin: 28px 0 40px; display: grid; grid-template-columns: 1fr 1.3fr; gap: 28px; align-items: center; }
-.routine-band img { width: 100%; border-radius: var(--radius-medium); aspect-ratio: 4/3; object-fit: cover; display: block; }
+.routine-band .thumb { aspect-ratio: 4/3; border-radius: var(--radius-medium); overflow: hidden; }
+.routine-band .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .routine-caption { font-size: 0.88rem; color: var(--color-text-secondary); margin: 0 0 16px; font-style: italic; }
 .routine-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid #F0EDF2; }
 .routine-item:last-child { border-bottom: none; }
@@ -238,3 +239,4 @@ footer.site-footer { padding: 40px 0 24px; border-top: 1px solid rgba(34,34,42,0
   font-size: 0.85rem; line-height: 1.6; color: var(--color-charcoal); margin: 16px 0;
 }
 .legal-note-box a { color: var(--color-royal-purple); font-weight: 600; }
+ 
