@@ -10,6 +10,12 @@ export default {
   },
 };
 
+const REDIRECT_TARGETS = {
+  "/work-with-me.html": "#contact-form",
+  "/partnerships.html": "#contact",
+  "/ugc-portfolio.html": "#contact",
+};
+
 async function handleContact(request, env, url) {
   const formData = await request.formData();
   const name = (formData.get("name") || "").toString().trim();
@@ -18,8 +24,14 @@ async function handleContact(request, env, url) {
   const interest = (formData.get("interest") || "").toString().trim();
   const message = (formData.get("message") || "").toString().trim();
 
+  const requestedRedirect = (formData.get("redirect_to") || "").toString().trim();
+  const redirectPath = Object.prototype.hasOwnProperty.call(REDIRECT_TARGETS, requestedRedirect)
+    ? requestedRedirect
+    : "/work-with-me.html";
+  const redirectHash = REDIRECT_TARGETS[redirectPath];
+
   if (!name || !email || !message) {
-    return Response.redirect(new URL("/work-with-me.html?error=1#contact-form", url), 303);
+    return Response.redirect(new URL(`${redirectPath}?error=1${redirectHash}`, url), 303);
   }
 
   const bodyLines = [
@@ -47,9 +59,8 @@ async function handleContact(request, env, url) {
   });
 
   if (!resendResponse.ok) {
-    return Response.redirect(new URL("/work-with-me.html?error=1#contact-form", url), 303);
+    return Response.redirect(new URL(`${redirectPath}?error=1${redirectHash}`, url), 303);
   }
 
-  return Response.redirect(new URL("/work-with-me.html?sent=1#contact-form", url), 303);
+  return Response.redirect(new URL(`${redirectPath}?sent=1${redirectHash}`, url), 303);
 }
-
