@@ -211,6 +211,10 @@ button { font-family: inherit; }
   font-weight: 600; font-size: 0.9rem; padding: 13px 30px; border-radius: 999px; cursor: pointer;
 }
 .rate-submit:hover { background: var(--light-lavender); }
+.form-note { font-size: 0.85rem; font-weight: 600; line-height: 1.5; margin: 0; padding: 12px 14px; border-radius: 10px; background: rgba(255,255,255,0.14); }
+.form-note.success { color: #fff; }
+.form-note.error { color: #FFE1E1; }
+.form-note a { color: #fff; text-decoration: underline; }
 .watch-link {
   display: block; font-size: 0.76rem; font-weight: 600; color: var(--royal-purple); text-decoration: none;
   padding: 8px 13px 0;
@@ -581,8 +585,11 @@ button { font-family: inherit; }
         <div class="contact-choice-card">
           <p class="contact-choice-title">Request Rates</p>
           <p class="contact-choice-desc">Send over a few details and it goes straight to my inbox. I'll follow up from there.</p>
+          <p id="pp-form-success" class="form-note success" style="display:none;">Thanks, your rate request is in. I'll get back to you soon.</p>
+          <p id="pp-form-error" class="form-note error" style="display:none;">Something went wrong sending that. Please try again, or email me directly at <a href="mailto:hello@queenreen.shop">hello@queenreen.shop</a>.</p>
           <form class="rate-form" action="https://queenreen.shop/api/contact" method="POST">
             <input type="hidden" name="interest" value="Creator Partnership (from Media Kit)">
+            <input type="hidden" name="redirect_to" value="/partnerships.html">
             <div class="rate-field">
               <label for="pp-name">Name</label>
               <input id="pp-name" type="text" name="name" required>
@@ -652,5 +659,17 @@ button { font-family: inherit; }
     if (!link || !link.classList.contains('watch-link')) return;
     box.addEventListener('click', function(){ window.open(link.href, '_blank', 'noopener'); });
   });
+})();
+</script>
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var form = document.querySelector('.rate-form');
+  if (params.get('sent') === '1') {
+    document.getElementById('pp-form-success').style.display = 'block';
+    if (form) form.style.display = 'none';
+  } else if (params.get('error') === '1') {
+    document.getElementById('pp-form-error').style.display = 'block';
+  }
 })();
 </script>
