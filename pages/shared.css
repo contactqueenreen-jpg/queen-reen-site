@@ -101,6 +101,7 @@ section { padding: 72px 0; }
 @media (max-width: 900px) { .grid-6 { grid-template-columns: repeat(2, 1fr); } .grid-4 { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 520px) { .grid-6, .grid-4 { grid-template-columns: 1fr; } }
 .disc-card { text-decoration: none; color: inherit; display: block; transition: transform .22s ease; }
+.disc-card.is-static { cursor: default; }
 .disc-card .thumb { aspect-ratio: 4/5; position: relative; border-radius: 28px 28px 10px 28px; overflow: hidden; margin-bottom: 15px; background: var(--color-light-lavender); box-shadow: var(--shadow-card); }
 .disc-card .thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
 .disc-card h3 { font-family: var(--font-body); font-weight: 600; font-size: .95rem; margin: 0 0 6px; line-height: 1.45; }
@@ -113,6 +114,8 @@ section { padding: 72px 0; }
   .disc-card:hover { transform: translateY(-3px); }
   .disc-card:hover .thumb { box-shadow: 0 16px 34px rgba(44, 32, 50, .12); }
   .disc-card:hover .thumb img { transform: scale(1.025); }
+  .disc-card.is-static:hover { transform: none; }
+  .disc-card.is-static:hover .thumb img { transform: none; }
 }
 
 /* On-site social video viewer */
@@ -169,6 +172,9 @@ footer.site-footer { padding: 40px 0 24px; border-top: 1px solid rgba(34,34,42,0
 .page-purpose-link a { color: var(--color-royal-purple); font-weight: 700; text-decoration: none; white-space: nowrap; }
 .page-purpose-link a:hover { text-decoration: underline; }
 .discover-grid { display: grid; gap: 20px; grid-template-columns: repeat(4, 1fr); align-items: start; }
+.travel-grid { grid-template-columns: repeat(3, 1fr); }
+.travel-destination-grid { grid-template-columns: repeat(3, 1fr); max-width: 700px; }
+@media (max-width: 700px) { .travel-destination-grid { grid-template-columns: repeat(2, 1fr); } }
 .discover-grid[data-content-feed="newest-first"] > .disc-card:first-child { grid-column: span 2; }
 .discover-grid[data-content-feed="newest-first"] > .disc-card:first-child .thumb { aspect-ratio: 16/10; }
 .discover-grid .disc-card .thumb { aspect-ratio: 1/1; }
