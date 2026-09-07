@@ -1,19 +1,55 @@
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    const isPreview = url.hostname.endsWith(".workers.dev");
 
     if (url.pathname === "/api/contact" && request.method === "POST") {
       return handleContact(request, env, url);
     }
 
-    return env.ASSETS.fetch(request);
+    if (!isPreview && (url.protocol !== "https:" || url.hostname !== "www.queenreen.shop")) {
+      url.protocol = "https:";
+      url.hostname = "www.queenreen.shop";
+      return Response.redirect(url, 308);
+    }
+
+    if (request.method === "GET" || request.method === "HEAD") {
+      const canonicalPath = getCanonicalPath(url.pathname);
+
+      if (canonicalPath !== url.pathname) {
+        url.pathname = canonicalPath;
+        return Response.redirect(url, 301);
+      }
+    }
+
+    const response = await env.ASSETS.fetch(request);
+
+    if (!isPreview) {
+      return response;
+    }
+
+    const previewResponse = new Response(response.body, response);
+    previewResponse.headers.set("X-Robots-Tag", "noindex, nofollow");
+    return previewResponse;
   },
 };
 
+function getCanonicalPath(pathname) {
+  if (pathname === "/index.html") {
+    return "/";
+  }
+
+  if (pathname.endsWith(".html")) {
+    return pathname.slice(0, -5);
+  }
+
+  return pathname;
+}
+
 const REDIRECT_TARGETS = {
-  "/work-with-me.html": "#contact-form",
-  "/partnerships.html": "#contact",
-  "/ugc-portfolio.html": "#contact",
+  "/work-with-me": "#contact-form",
+  "/partnerships": "#contact",
+  "/ugc-portfolio": "#contact",
 };
 
 async function handleContact(request, env, url) {
@@ -27,7 +63,7 @@ async function handleContact(request, env, url) {
   const requestedRedirect = (formData.get("redirect_to") || "").toString().trim();
   const redirectPath = Object.prototype.hasOwnProperty.call(REDIRECT_TARGETS, requestedRedirect)
     ? requestedRedirect
-    : "/work-with-me.html";
+    : "/work-with-me";
   const redirectHash = REDIRECT_TARGETS[redirectPath];
 
   if (!name || !email || !message) {

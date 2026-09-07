@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
 var navToggle = document.querySelector('.nav-toggle');
 var navLinks = document.getElementById('navLinks');
 if (navToggle && navLinks) {
-  var shopLink = navLinks.querySelector('a[href="shop-all.html"]');
+  var shopLink = navLinks.querySelector('a[href="/shop-all"]');
   if (shopLink) {
     var shopItem = shopLink.closest('li');
     shopItem.classList.add('nav-shop-item');
@@ -17,11 +17,11 @@ if (navToggle && navLinks) {
     var shopMenu = document.createElement('ul');
     shopMenu.className = 'nav-submenu';
     shopMenu.innerHTML =
-      '<li><a href="shop-all.html">Shop All</a></li>' +
-      '<li><a href="shop.html">Beauty</a></li>' +
-      '<li><a href="shop-fashion.html">Fashion</a></li>' +
-      '<li><a href="shop-hair.html">Hair</a></li>' +
-      '<li><a href="shop-home.html">Home &amp; Lifestyle</a></li>';
+      '<li><a href="/shop-all">Shop All</a></li>' +
+      '<li><a href="/shop">Beauty</a></li>' +
+      '<li><a href="/shop-fashion">Fashion</a></li>' +
+      '<li><a href="/shop-hair">Hair</a></li>' +
+      '<li><a href="/shop-home">Home &amp; Lifestyle</a></li>';
 
     shopItem.appendChild(shopToggle);
     shopItem.appendChild(shopMenu);
