@@ -125,6 +125,10 @@ button { font-family: inherit; }
   width: 100%; aspect-ratio: 3/4; border-radius: var(--radius-m); overflow: hidden; box-shadow: var(--shadow);
 }
 .about-photo img { width: 100%; height: 100%; object-fit: cover; }
+.about-photo.creator-photo {
+  background: linear-gradient(155deg, #F7EEF9 0%, #E9DDF3 58%, #D5BCE8 100%);
+}
+.about-photo.creator-photo img { object-fit: contain; object-position: center bottom; }
 .about-name { font-family: var(--font-heading); font-weight: 700; font-size: 1.3rem; margin: 0 0 4px; }
 .about-loc { font-size: 0.85rem; color: var(--royal-purple); font-weight: 600; margin: 0 0 16px; }
 .about-body p { font-size: 1rem; line-height: 1.75; color: var(--text-secondary); margin: 0 0 12px; }
@@ -252,9 +256,13 @@ button { font-family: inherit; }
 .port-card.c-lilac { border-color: var(--tint-lilac-border); }
 .port-card.c-white { border-color: var(--border); }
 .port-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(90,50,140,0.16); }
-.port-body { padding: 12px 14px 2px; }
+.port-body { padding: 12px 14px 15px; min-height: 78px; }
 .port-body.c-lilac { background: var(--tint-lilac); }
 .port-body.c-white { background: var(--paper); }
+.port-type {
+  font-size: 0.64rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+  color: var(--royal-purple); margin: 0 0 6px; line-height: 1.35;
+}
 .port-name { font-family: var(--font-heading); font-weight: 600; font-size: 0.86rem; margin: 0; line-height: 1.35; }
 .port-card .watch-link.c-lilac { background: var(--tint-lilac); padding-bottom: 12px; }
 .port-card .watch-link.c-white { background: var(--paper); padding-bottom: 12px; }
@@ -457,7 +465,7 @@ button { font-family: inherit; }
 <section class="section">
   <div class="wrap">
     <div class="about-card reveal">
-      <div class="about-photo"><img src="Reen%20Headshot.jpg" alt="Queen Reen" loading="lazy" decoding="async"></div>
+      <div class="about-photo creator-photo"><img src="media/Queen%20Reen%20Hero%20Cutout.webp" alt="Queen Reen wearing a floral corset top with wide-leg jeans" width="700" height="1524" loading="lazy" decoding="async"></div>
       <div>
         <p class="about-name">I'm Reen.</p>
         <p class="about-loc">Charlotte, NC · Bay Area roots</p>
@@ -474,8 +482,8 @@ button { font-family: inherit; }
   <div class="wrap">
     <div class="section-head reveal">
       <p class="section-eyebrow">What I Create</p>
-      <h2 class="section-title">How I Can Bring the Product to Life</h2>
-      <p class="section-sub">Some products need a clear demo. Others need a real opinion, a routine, or a visual story. I shape the concept around what will make the product easy to understand and worth watching.</p>
+      <h2 class="section-title">How I Create for Brands</h2>
+      <p class="section-sub">Some things need a clear demo. Others make more sense through styling, a real-life problem, an honest reaction, or a reason to visit. I build the idea around what people actually need to see.</p>
     </div>
     <div class="value-grid reveal">
       <div class="value-card c-white">
@@ -507,66 +515,90 @@ button { font-family: inherit; }
     <div class="section-head reveal">
       <p class="section-eyebrow">The Work</p>
       <h2 class="section-title">Selected Work</h2>
-      <p class="section-sub">A mix of product demos, honest recommendations, style, hair, and local finds—the work that feels most like me and shows what I can bring to a brand. Hover to watch, or click through to see it on the original platform.</p>
+      <p class="section-sub">Fashion, beauty, hair, self-care, lifestyle, and local finds—the work that feels most like me and shows what I can bring to a brand. Hover to watch, or click through to see it on the original platform.</p>
     </div>
 
     <div class="cat-block reveal">
       <div class="port-grid">
         <div class="port-card c-lilac">
-          <div class="media-box" data-platform="tiktok" data-id="7662165748915129630">
-            <img src="media/Haircut%20at%20Different%20By%20Design.jpg" alt="Natural hair trim at Different by Design" loading="lazy" decoding="async">
-          </div>
-          <a class="watch-link c-lilac" href="https://www.tiktok.com/@queen_reen/video/7662165748915129630" target="_blank" rel="noopener">Watch on TikTok ↗</a>
-          <div class="port-body c-lilac"><p class="port-name">Finding a Natural Hair Trim in Charlotte</p></div>
-        </div>
-        <div class="port-card c-white">
-          <div class="media-box" data-platform="tiktok" data-id="7658514645094829342">
-            <img src="media/Tress%20Wellness%20At%20Home%20Wax%20Kit.png" alt="Tress Wellness at-home wax demonstration" loading="lazy" decoding="async">
-          </div>
-          <a class="watch-link c-white" href="https://www.tiktok.com/@queen_reen/video/7658514645094829342" target="_blank" rel="noopener">Watch on TikTok ↗</a>
-          <div class="port-body c-white"><p class="port-name">Tress Wellness At-Home Wax Demo</p></div>
-        </div>
-        <div class="port-card c-lilac">
-          <div class="media-box" data-platform="tiktok" data-id="7674122941000355103">
-            <img src="media/Adjustable%20Hair%20Scrunchie.jpeg" alt="Adjustable scrunchie demonstrated on thick curly hair" loading="lazy" decoding="async">
-          </div>
-          <a class="watch-link c-lilac" href="https://www.tiktok.com/@queen_reen/video/7674122941000355103" target="_blank" rel="noopener">Watch on TikTok ↗</a>
-          <div class="port-body c-lilac"><p class="port-name">A Scrunchie That Actually Fits Thick Hair</p></div>
-        </div>
-        <div class="port-card c-white">
           <div class="media-box" data-platform="tiktok" data-id="7664664405472251166">
             <img src="media/Deep%20V%20Halter%20Dress.jpg" alt="Deep V halter dress try-on" loading="lazy" decoding="async">
           </div>
-          <a class="watch-link c-white" href="https://www.tiktok.com/@queen_reen/video/7664664405472251166" target="_blank" rel="noopener">Watch on TikTok ↗</a>
-          <div class="port-body c-white"><p class="port-name">Deep V Halter Dress Try-On</p></div>
+          <a class="watch-link c-lilac" href="https://www.tiktok.com/@queen_reen/video/7664664405472251166" target="_blank" rel="noopener">Watch on TikTok ↗</a>
+          <div class="port-body c-lilac">
+            <p class="port-type">Fit + Styling</p>
+            <p class="port-name">Deep V Halter Dress Try-On</p>
+          </div>
         </div>
-        <div class="port-card c-lilac">
+        <div class="port-card c-white">
           <div class="media-box" data-platform="tiktok" data-id="7661086109354544415">
             <img src="media/Fashion%20Nova%20Baggy%20Jeans.jpg" alt="Fashion Nova baggy cargo jeans try-on" loading="lazy" decoding="async">
           </div>
-          <a class="watch-link c-lilac" href="https://www.tiktok.com/@queen_reen/video/7661086109354544415" target="_blank" rel="noopener">Watch on TikTok ↗</a>
-          <div class="port-body c-lilac"><p class="port-name">Fashion Nova Baggy Cargo Jeans</p></div>
-        </div>
-        <div class="port-card c-white">
-          <div class="media-box" data-platform="tiktok" data-id="7659028625437642015">
-            <img src="media/64%20oz%20Glass%20Water%20Bottle.jpg" alt="64 ounce glass water bottle in daily use" loading="lazy" decoding="async">
+          <a class="watch-link c-white" href="https://www.tiktok.com/@queen_reen/video/7661086109354544415" target="_blank" rel="noopener">Watch on TikTok ↗</a>
+          <div class="port-body c-white">
+            <p class="port-type">Brand Integration + Styling</p>
+            <p class="port-name">Fashion Nova Baggy Cargo Jeans</p>
           </div>
-          <a class="watch-link c-white" href="https://www.tiktok.com/@queen_reen/video/7659028625437642015" target="_blank" rel="noopener">Watch on TikTok ↗</a>
-          <div class="port-body c-white"><p class="port-name">The Bottle That Made Hydration Easier</p></div>
         </div>
         <div class="port-card c-lilac">
-          <div class="media-box" data-platform="tiktok" data-id="7653313076007030046">
-            <img src="media/Honey%20Pies%20BBQ%20Charlotte.jpg" alt="Honey Pies BBQ Charlotte food review" loading="lazy" decoding="async">
+          <div class="media-box" data-platform="tiktok" data-id="7658514645094829342">
+            <img src="media/Tress%20Wellness%20At%20Home%20Wax%20Kit.png" alt="Tress Wellness at-home wax demonstration" loading="lazy" decoding="async">
           </div>
-          <a class="watch-link c-lilac" href="https://www.tiktok.com/@queen_reen/video/7653313076007030046" target="_blank" rel="noopener">Watch on TikTok ↗</a>
-          <div class="port-body c-lilac"><p class="port-name">Honey Pies BBQ: Charlotte Food Find</p></div>
+          <a class="watch-link c-lilac" href="https://www.tiktok.com/@queen_reen/video/7658514645094829342" target="_blank" rel="noopener">Watch on TikTok ↗</a>
+          <div class="port-body c-lilac">
+            <p class="port-type">Real-Use Demo</p>
+            <p class="port-name">Tress Wellness At-Home Wax Demo</p>
+          </div>
         </div>
         <div class="port-card c-white">
+          <div class="media-box" data-platform="tiktok" data-id="7674122941000355103">
+            <img src="media/Adjustable%20Hair%20Scrunchie.jpeg" alt="Adjustable scrunchie demonstrated on thick curly hair" loading="lazy" decoding="async">
+          </div>
+          <a class="watch-link c-white" href="https://www.tiktok.com/@queen_reen/video/7674122941000355103" target="_blank" rel="noopener">Watch on TikTok ↗</a>
+          <div class="port-body c-white">
+            <p class="port-type">Problem + Solution</p>
+            <p class="port-name">A Scrunchie That Actually Fits Thick Hair</p>
+          </div>
+        </div>
+        <div class="port-card c-lilac">
           <div class="media-box" data-platform="tiktok" data-id="7664412660741573918">
             <img src="media/Blow%20Dryer.png" alt="Ionic hairdryer tested on thick curly hair" loading="lazy" decoding="async">
           </div>
-          <a class="watch-link c-white" href="https://www.tiktok.com/@queen_reen/video/7664412660741573918" target="_blank" rel="noopener">Watch on TikTok ↗</a>
-          <div class="port-body c-white"><p class="port-name">Testing an Ionic Hairdryer on Thick Curls</p></div>
+          <a class="watch-link c-lilac" href="https://www.tiktok.com/@queen_reen/video/7664412660741573918" target="_blank" rel="noopener">Watch on TikTok ↗</a>
+          <div class="port-body c-lilac">
+            <p class="port-type">Product Demo + Hair</p>
+            <p class="port-name">Testing an Ionic Hairdryer on Thick Curls</p>
+          </div>
+        </div>
+        <div class="port-card c-white">
+          <div class="media-box" data-platform="tiktok" data-id="7662165748915129630">
+            <img src="media/Haircut%20at%20Different%20By%20Design.jpg" alt="Natural hair trim at Different by Design" loading="lazy" decoding="async">
+          </div>
+          <a class="watch-link c-white" href="https://www.tiktok.com/@queen_reen/video/7662165748915129630" target="_blank" rel="noopener">Watch on TikTok ↗</a>
+          <div class="port-body c-white">
+            <p class="port-type">Service + Local Story</p>
+            <p class="port-name">Finding a Natural Hair Trim in Charlotte</p>
+          </div>
+        </div>
+        <div class="port-card c-lilac">
+          <div class="media-box" data-platform="tiktok" data-id="7659028625437642015">
+            <img src="media/64%20oz%20Glass%20Water%20Bottle.jpg" alt="64 ounce glass water bottle in daily use" loading="lazy" decoding="async">
+          </div>
+          <a class="watch-link c-lilac" href="https://www.tiktok.com/@queen_reen/video/7659028625437642015" target="_blank" rel="noopener">Watch on TikTok ↗</a>
+          <div class="port-body c-lilac">
+            <p class="port-type">Everyday Product Story</p>
+            <p class="port-name">The Bottle That Made Hydration Easier</p>
+          </div>
+        </div>
+        <div class="port-card c-white">
+          <div class="media-box" data-platform="tiktok" data-id="7653313076007030046">
+            <img src="media/Honey%20Pies%20BBQ%20Charlotte.jpg" alt="Honey Pies BBQ Charlotte food review" loading="lazy" decoding="async">
+          </div>
+          <a class="watch-link c-white" href="https://www.tiktok.com/@queen_reen/video/7653313076007030046" target="_blank" rel="noopener">Watch on TikTok ↗</a>
+          <div class="port-body c-white">
+            <p class="port-type">Local Storytelling</p>
+            <p class="port-name">Honey Pies BBQ: Charlotte Food Find</p>
+          </div>
         </div>
       </div>
     </div>
