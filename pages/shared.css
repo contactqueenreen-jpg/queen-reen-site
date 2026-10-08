@@ -179,6 +179,7 @@ footer.site-footer { padding: 40px 0 24px; border-top: 1px solid rgba(34,34,42,0
 .discover-grid[data-content-feed="newest-first"] > .disc-card:first-child .thumb { aspect-ratio: 16/10; }
 .discover-grid .disc-card .thumb { aspect-ratio: 1/1; }
 .discover-grid .disc-card p time { color: inherit; }
+#discover-teaser [data-content-feed="newest-first"] > .disc-card:nth-child(n+7) { display: none; }
 @media (max-width: 900px) {
   .discover-masthead { grid-template-columns: 1fr; gap: 22px; }
   .discover-masthead .section-title { max-width: 10ch; }
