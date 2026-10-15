@@ -18,6 +18,7 @@ if (navToggle && navLinks) {
     shopMenu.className = 'nav-submenu';
     shopMenu.innerHTML =
       '<li><a href="/shop-all">Shop All</a></li>' +
+      '<li><a href="/shop-looks">Shop My Looks</a></li>' +
       '<li><a href="/shop">Beauty</a></li>' +
       '<li><a href="/shop-fashion">Fashion</a></li>' +
       '<li><a href="/shop-hair">Hair</a></li>' +
@@ -221,6 +222,53 @@ document.querySelectorAll('.chip-row').forEach(function (chipRow) {
       card.classList.toggle('is-hidden', !show);
     });
   });
+});
+
+document.querySelectorAll('.look-gallery').forEach(function (gallery) {
+  var viewport = gallery.querySelector('[data-look-gallery]');
+  var slides = Array.from(gallery.querySelectorAll('.look-slide'));
+  var thumbs = Array.from(gallery.querySelectorAll('[data-look-index]'));
+  var previous = gallery.querySelector('[data-look-prev]');
+  var next = gallery.querySelector('[data-look-next]');
+  var activeIndex = 0;
+  var scrollTimer;
+  if (!viewport || !slides.length) return;
+
+  function setActive(index, shouldScroll) {
+    activeIndex = (index + slides.length) % slides.length;
+    thumbs.forEach(function (thumb, thumbIndex) {
+      var isActive = thumbIndex === activeIndex;
+      thumb.classList.toggle('is-active', isActive);
+      if (isActive) thumb.setAttribute('aria-current', 'true');
+      else thumb.removeAttribute('aria-current');
+    });
+    if (shouldScroll) slides[activeIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    slides.forEach(function (slide, slideIndex) {
+      if (slideIndex !== activeIndex) {
+        var video = slide.querySelector('video');
+        if (video) video.pause();
+      }
+    });
+  }
+
+  thumbs.forEach(function (thumb) {
+    thumb.addEventListener('click', function () {
+      setActive(Number(thumb.getAttribute('data-look-index')), true);
+    });
+  });
+  if (previous) previous.addEventListener('click', function () { setActive(activeIndex - 1, true); });
+  if (next) next.addEventListener('click', function () { setActive(activeIndex + 1, true); });
+  viewport.addEventListener('keydown', function (event) {
+    if (event.key === 'ArrowLeft') { event.preventDefault(); setActive(activeIndex - 1, true); }
+    if (event.key === 'ArrowRight') { event.preventDefault(); setActive(activeIndex + 1, true); }
+  });
+  viewport.addEventListener('scroll', function () {
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(function () {
+      var index = Math.round(viewport.scrollLeft / viewport.clientWidth);
+      setActive(Math.max(0, Math.min(index, slides.length - 1)), false);
+    }, 90);
+  }, { passive: true });
 });
 
 document.querySelectorAll('.share-btn').forEach(function (btn) {
