@@ -366,10 +366,10 @@ footer.site-footer { padding: 40px 0 24px; border-top: 1px solid rgba(34,34,42,0
 .look-gallery-viewport::-webkit-scrollbar { display: none; }
 .look-gallery-track { display: flex; }
 .look-slide { flex: 0 0 100%; aspect-ratio: 4/5; margin: 0; overflow: hidden; scroll-snap-align: start; scroll-snap-stop: always; background: linear-gradient(145deg, #E9DED2, #CDBEAD); }
-.look-slide img, .look-slide video { width: 100%; height: 100%; object-fit: cover; }
+.look-slide img, .look-slide video { width: 100%; height: 100%; object-fit: contain; object-position: center; }
 .look-slide video { display: block; background: #171519; }
 .look-slide-wide { background: #D3C8BA; }
-.look-slide-wide img { object-fit: cover; object-position: 45% center; }
+.look-slide-wide img { object-fit: contain; object-position: center; }
 .look-gallery-arrow { position: absolute; z-index: 3; top: calc(50% - 42px); display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid rgba(255,255,255,.7); border-radius: 50%; background: rgba(255,253,252,.84); color: var(--color-charcoal); font: 500 1.1rem/1 var(--font-body); box-shadow: 0 10px 26px rgba(30,22,32,.14); backdrop-filter: blur(12px); cursor: pointer; }
 .look-gallery-prev { left: 18px; }
 .look-gallery-next { right: 18px; }
