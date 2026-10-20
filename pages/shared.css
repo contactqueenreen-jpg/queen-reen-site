@@ -394,14 +394,19 @@ footer.site-footer { padding: 40px 0 24px; border-top: 1px solid rgba(34,34,42,0
 .look-shop-heading { margin-bottom: 8px; }
 .look-shop-heading h3 { margin: 0; font: 400 1.55rem/1.1 var(--font-heading); }
 .look-products { border-top: 1px solid rgba(34,34,42,.1); }
-.look-product { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; padding: 15px 0; border-bottom: 1px solid rgba(34,34,42,.1); }
-.look-product strong { font-size: .85rem; font-weight: 600; }
-.look-product span { color: var(--color-text-secondary); font-size: .69rem; font-weight: 600; text-align: right; }
+.look-product { display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 66px; padding: 12px 0; border-bottom: 1px solid rgba(34,34,42,.1); }
+.look-product > div { min-width: 0; }
+.look-product strong { display: block; font-size: .85rem; font-weight: 600; }
+.look-product span { display: block; margin-top: 3px; color: var(--color-text-secondary); font-size: .67rem; font-weight: 500; }
+.look-shop-link { flex: 0 0 auto; padding: 9px 15px; border: 1px solid rgba(109,53,181,.22); border-radius: 999px; background: rgba(109,53,181,.06); color: var(--color-royal-purple); font-size: .67rem; font-weight: 700; text-decoration: none; transition: background .18s ease, color .18s ease, transform .18s ease; }
+.look-disclosure { margin: 17px 0 0; color: var(--color-text-secondary); font-size: .65rem; line-height: 1.6; }
+.look-disclosure a { color: inherit; }
 .looks-next { max-width: 720px; margin: 92px auto 22px; text-align: center; }
 .looks-next h2 { margin: 0 0 12px; font: 400 clamp(2.4rem, 5vw, 4rem)/.95 var(--font-heading); }
 .looks-next > p:last-child { max-width: 58ch; margin: 0 auto; color: var(--color-text-secondary); font-size: .9rem; line-height: 1.7; }
 @media (hover:hover) {
   .look-gallery-thumb:hover { opacity: 1; transform: translateY(-2px); }
+  .look-shop-link:hover { background: var(--color-royal-purple); color: #fff; transform: translateY(-1px); }
 }
 @media (max-width: 820px) {
   .looks-page { padding-top: 30px; }
