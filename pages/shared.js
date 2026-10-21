@@ -161,6 +161,44 @@ if (tiktokCards.length) {
   });
 }
 
+var instagramPreviewCards = document.querySelectorAll('.disc-card[href*="instagram.com/"][data-preview-src]');
+if (instagramPreviewCards.length && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  instagramPreviewCards.forEach(function (card) {
+    var thumb = card.querySelector('.thumb');
+    var previewSrc = card.getAttribute('data-preview-src');
+    if (!thumb || !previewSrc) return;
+
+    card.addEventListener('mouseenter', function () {
+      card._instagramPreviewTimer = setTimeout(function () {
+        if (thumb.querySelector('.video-hover-player')) return;
+        var preview = document.createElement('video');
+        preview.className = 'video-hover-player';
+        preview.src = previewSrc;
+        preview.muted = true;
+        preview.autoplay = true;
+        preview.loop = true;
+        preview.playsInline = true;
+        preview.preload = 'auto';
+        preview.setAttribute('aria-hidden', 'true');
+        preview.setAttribute('tabindex', '-1');
+        thumb.appendChild(preview);
+        card.classList.add('is-previewing');
+        preview.play().catch(function () {
+          preview.remove();
+          card.classList.remove('is-previewing');
+        });
+      }, 320);
+    });
+
+    card.addEventListener('mouseleave', function () {
+      clearTimeout(card._instagramPreviewTimer);
+      var preview = thumb.querySelector('.video-hover-player');
+      if (preview) preview.remove();
+      card.classList.remove('is-previewing');
+    });
+  });
+}
+
 document.addEventListener('error', function (e) {
   if (e.target.tagName === 'IMG') {
     var parent = e.target.closest('.thumb, .hero-ph');
