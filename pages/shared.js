@@ -17,6 +17,7 @@ if (navToggle && navLinks) {
     var shopMenu = document.createElement('ul');
     shopMenu.className = 'nav-submenu';
     shopMenu.innerHTML =
+      '<li><a href="/shop-videos">Shop My Videos</a></li>' +
       '<li><a href="/shop-all">Shop All</a></li>' +
       '<li><a href="/shop">Beauty</a></li>' +
       '<li><a href="/shop-fashion">Fashion</a></li>' +
