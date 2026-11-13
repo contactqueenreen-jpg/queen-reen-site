@@ -114,3 +114,7 @@
  .sv-card-image img{min-height:310px}
  .sv-card-copy .sv-product-name{font-size:.63rem!important}
 }
+
+.sv-water-review {align-items:center}
+.sv-water-player {width:100%;max-width:none;aspect-ratio:16/9}
+.sv-water-review .sv-disclosure {margin-bottom:12px}
